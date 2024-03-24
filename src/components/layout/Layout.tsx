@@ -13,7 +13,7 @@ import { path } from "../../routes/path";
 import { border } from "../../theme/constants";
 import { Home, Category2, ArrowLeft2, LogoutCurve } from "iconsax-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const menuItems: MenuProps["items"] = [
   {
@@ -42,6 +42,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const { colorBgBase } = theme.useToken().token;
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const path = useLocation().pathname;
 
   const handleNavigate: MenuProps["onClick"] = (e) => {
     navigate(e.key);
@@ -68,6 +69,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           items={menuItems}
           style={{ marginTop: 20 }}
           onClick={handleNavigate}
+          selectedKeys={[path]}
         ></Menu>
         <Button
           style={{ position: "absolute", bottom: 16, width: "100%" }}

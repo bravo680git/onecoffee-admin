@@ -15,4 +15,9 @@ export const routes: Route[] = [
     component: Pages.Home,
     layout: MainLayout,
   },
+  {
+    path: path.categories,
+    component: Pages.Category,
+    layout: MainLayout,
+  },
 ];
