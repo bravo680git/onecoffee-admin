@@ -6,11 +6,15 @@ export default function AppRouter() {
     <BrowserRouter>
       <Routes>
         {routes.map((route) => {
-          const Component = route.component;
-
-          return (
-            <Route path={route.path} element={<Component />} key={route.path} />
+          const Element = route.layout ? (
+            <route.layout>
+              <route.component></route.component>
+            </route.layout>
+          ) : (
+            <route.component></route.component>
           );
+
+          return <Route path={route.path} element={Element} key={route.path} />;
         })}
       </Routes>
     </BrowserRouter>
