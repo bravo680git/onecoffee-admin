@@ -20,4 +20,14 @@ export const routes: Route[] = [
     component: Pages.Category,
     layout: MainLayout,
   },
+  {
+    path: path.products,
+    component: Pages.Product,
+    layout: MainLayout,
+  },
+  {
+    path: path.productDetail,
+    component: Pages.ProductDetail,
+    layout: MainLayout,
+  },
 ];

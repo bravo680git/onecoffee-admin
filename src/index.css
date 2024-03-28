@@ -7,3 +7,38 @@
 body {
   font-size: 14px;
 }
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #56565656;
+  border-radius: 30px;
+}
+
+.ql-toolbar,
+.ql-container {
+  border-color: #565656 !important;
+}
+.ql-toolbar {
+  border-radius: 8px 8px 0 0 !important;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ql-container {
+  border-radius: 0 0 8px 8px !important;
+}
+.ql-formats {
+  background-color: #56565622;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.ql-editor.ql-blank::before {
+  color: #ffffff77;
+}
