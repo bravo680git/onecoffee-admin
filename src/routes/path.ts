@@ -4,4 +4,5 @@ export const path = {
   categories: "/categories",
   products: "/products",
   productDetail: "/products/:id",
+  users: "/users",
 };

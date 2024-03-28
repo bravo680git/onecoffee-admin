@@ -11,7 +11,14 @@ import {
 import React from "react";
 import { path } from "../../routes/path";
 import { border } from "../../theme/constants";
-import { Home, Category2, ArrowLeft2, LogoutCurve, Box } from "iconsax-react";
+import {
+  Home,
+  Category2,
+  ArrowLeft2,
+  LogoutCurve,
+  Box,
+  User,
+} from "iconsax-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -30,6 +37,11 @@ const menuItems: MenuProps["items"] = [
     key: path.products,
     label: "Sản phẩm",
     icon: <Box size={16} />,
+  },
+  {
+    key: path.users,
+    label: "Khách hàng",
+    icon: <User size={16} />,
   },
 ];
 

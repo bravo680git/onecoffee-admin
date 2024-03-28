@@ -8,6 +8,13 @@ export const RULES: Record<
   NUMBER: { type: "number", message: "Vui lòng nhập một số hợp lệ" },
 };
 
+export enum Action {
+  view,
+  create,
+  edit,
+  delete,
+}
+
 export const PRODUCT_EDITOR_OPTION = {
   toolbar: [
     ["bold", "italic", "underline", "strike"],

@@ -34,4 +34,9 @@ export const routes: Route[] = [
     component: Pages.ProductDetail,
     layout: MainLayout,
   },
+  {
+    path: path.users,
+    component: Pages.User,
+    layout: MainLayout,
+  },
 ];
