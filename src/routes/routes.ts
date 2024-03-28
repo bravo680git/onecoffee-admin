@@ -11,6 +11,10 @@ type Route = {
 
 export const routes: Route[] = [
   {
+    path: path.login,
+    component: Pages.Login,
+  },
+  {
     path: path.home,
     component: Pages.Home,
     layout: MainLayout,
