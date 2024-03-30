@@ -39,4 +39,14 @@ export const routes: Route[] = [
     component: Pages.User,
     layout: MainLayout,
   },
+  {
+    path: path.blogs,
+    component: Pages.Blog,
+    layout: MainLayout,
+  },
+  {
+    path: path.blogDetail,
+    component: Pages.BlogDetail,
+    layout: MainLayout,
+  },
 ];

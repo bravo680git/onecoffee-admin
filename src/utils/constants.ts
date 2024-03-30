@@ -44,3 +44,27 @@ export const PRODUCT_EDITOR_OPTION = {
     "clean",
   ],
 };
+
+export const BLOG_EDITOR_OPTION = {
+  toolbar: {
+    container: [
+      ["bold", "italic", "underline", "strike"],
+      [{ color: [] }, { background: [] }],
+      [{ align: [] }],
+      [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ size: ["small", false, "large", "huge"] }],
+      [{ script: "sub" }, { script: "super" }],
+      ["link", "image", "blockquote"],
+      ["clean"],
+    ],
+  },
+  format: [
+    ...PRODUCT_EDITOR_OPTION.format,
+    "header",
+    "size",
+    "image",
+    "blockquote",
+  ],
+};

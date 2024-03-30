@@ -18,6 +18,7 @@ import {
   LogoutCurve,
   Box,
   User,
+  Blogger,
 } from "iconsax-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -42,6 +43,11 @@ const menuItems: MenuProps["items"] = [
     key: path.users,
     label: "Khách hàng",
     icon: <User size={16} />,
+  },
+  {
+    key: path.blogs,
+    label: "Bài viết",
+    icon: <Blogger size={16} />,
   },
 ];
 
