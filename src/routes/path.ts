@@ -7,4 +7,5 @@ export const path = {
   users: "/users",
   blogs: "/blogs",
   blogDetail: "/blogs/:id",
+  orders: "/orders",
 };

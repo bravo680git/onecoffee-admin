@@ -49,4 +49,9 @@ export const routes: Route[] = [
     component: Pages.BlogDetail,
     layout: MainLayout,
   },
+  {
+    path: path.orders,
+    component: Pages.Order,
+    layout: MainLayout,
+  },
 ];

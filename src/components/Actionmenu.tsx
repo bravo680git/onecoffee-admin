@@ -1,6 +1,6 @@
 import { Button, Card, Dropdown } from "antd";
 import { Action } from "../utils/constants";
-import { Add, Edit, Eye, More, Trash } from "iconsax-react";
+import { Additem, Edit, Eye, More, Trash } from "iconsax-react";
 import React from "react";
 
 export type ActionMenuProps = {
@@ -31,7 +31,7 @@ function ActionMenu({
   const actionDist: ActionDist = {
     create: {
       title: "Tạo mới",
-      icon: <Add size={16} />,
+      icon: <Additem size={16} />,
       onClick: onCreate,
     },
     edit: {
@@ -67,7 +67,13 @@ function ActionMenu({
               onClick={actionDist[act].onClick}
               icon={actionDist[act].icon}
               type="text"
-              style={{ textAlign: "left" }}
+              style={{
+                textAlign: "left",
+                display: "flex",
+                justifyContent: "flex-start",
+                gap: 0,
+                alignItems: "center",
+              }}
               danger={actionDist[act].danger}
             >
               {actionDist[act].title}
