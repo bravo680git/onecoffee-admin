@@ -5,3 +5,4 @@ export * from "./product";
 export { default as User } from "./User";
 export * from "./blog";
 export { default as Order } from "./Order";
+export { default as Banner } from "./Banner";

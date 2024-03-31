@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "antd": "^5.15.3",
+    "antd-img-crop": "^4.21.0",
     "antd-input-otp": "^2.1.0",
     "axios": "^1.6.8",
     "iconsax-react": "^0.0.8",

@@ -20,6 +20,7 @@ import {
   User,
   Blogger,
   ShoppingCart,
+  Image,
 } from "iconsax-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -29,6 +30,11 @@ const menuItems: MenuProps["items"] = [
     key: path.home,
     label: "Trang chủ",
     icon: <Home size={16} />,
+  },
+  {
+    key: path.banners,
+    label: "Banner",
+    icon: <Image size={16} />,
   },
   {
     key: path.categories,

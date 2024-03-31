@@ -8,4 +8,5 @@ export const path = {
   blogs: "/blogs",
   blogDetail: "/blogs/:id",
   orders: "/orders",
+  banners: "/banners",
 };

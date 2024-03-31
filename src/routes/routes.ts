@@ -54,4 +54,9 @@ export const routes: Route[] = [
     component: Pages.Order,
     layout: MainLayout,
   },
+  {
+    path: path.banners,
+    component: Pages.Banner,
+    layout: MainLayout,
+  },
 ];
