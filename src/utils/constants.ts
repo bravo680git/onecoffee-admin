@@ -4,7 +4,7 @@ export const RULES: Record<
   "REQUIRED" | "NUMBER",
   NonNullable<FormItemProps["rules"]>[number]
 > = {
-  REQUIRED: { required: true, message: "Trường này là bắc buộc" },
+  REQUIRED: { required: true, message: "Trường này là bắt buộc" },
   NUMBER: { type: "number", message: "Vui lòng nhập một số hợp lệ" },
 };
 

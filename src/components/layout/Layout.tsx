@@ -63,21 +63,24 @@ const menuItems: MenuProps["items"] = [
   },
 ];
 
-const userMenu: DropDownProps["menu"] = {
-  items: [
-    {
-      key: "logout",
-      label: "Đăng xuất",
-      icon: <LogoutCurve size={16} />,
-    },
-  ],
-};
-
 function MainLayout({ children }: { children: React.ReactNode }) {
   const { colorBgBase } = theme.useToken().token;
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-  const path = useLocation().pathname;
+  const pathname = useLocation().pathname;
+
+  const userMenu: DropDownProps["menu"] = {
+    items: [
+      {
+        key: "logout",
+        label: "Đăng xuất",
+        icon: <LogoutCurve size={16} />,
+        onClick() {
+          navigate(path.login);
+        },
+      },
+    ],
+  };
 
   const handleNavigate: MenuProps["onClick"] = (e) => {
     navigate(e.key);
@@ -104,7 +107,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           items={menuItems}
           style={{ marginTop: 20 }}
           onClick={handleNavigate}
-          selectedKeys={[path]}
+          selectedKeys={[pathname]}
         ></Menu>
         <Button
           style={{ position: "absolute", bottom: 16, width: "100%" }}
