@@ -20,3 +20,20 @@ export function combineArrays<T>(arrays: T[][]): T[][] {
 
   return combine(0);
 }
+
+export function generateTreeData<
+  S extends { id: number; parentId?: number },
+  D extends object
+>(items: S[] | undefined, cb: (item: S) => D) {
+  if (!items) {
+    return [];
+  }
+  const parents = items.filter((item) => !item.parentId);
+
+  return parents.map((parent) => ({
+    ...cb(parent),
+    children: items
+      .filter((item) => item.parentId === parent.id)
+      .map((item) => cb(item)),
+  }));
+}

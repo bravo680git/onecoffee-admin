@@ -68,3 +68,7 @@ export const BLOG_EDITOR_OPTION = {
     "blockquote",
   ],
 };
+
+export const MSG_DIST: Record<string, string> = {
+  DUPLICATE_RECORD: "Dữ liệu bị trùng lặp",
+};

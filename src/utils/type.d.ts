@@ -8,3 +8,9 @@ type ModalState<T = unknown> = {
   data?: T;
   action?: Action;
 };
+
+type BaseResponse<T extends object | object[] = null> = {
+  statusCode: number;
+  message: string;
+  data: T;
+};

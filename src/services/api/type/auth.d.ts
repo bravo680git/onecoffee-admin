@@ -1,4 +1,14 @@
 export type LoginPayload = {
-  username: string;
+  email: string;
   password: string;
+};
+
+type LoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+  user: {
+    name: string;
+    email: string;
+    avatar?: string;
+  };
 };
