@@ -21,6 +21,7 @@ import {
   Blogger,
   ShoppingCart,
   Image,
+  Award,
 } from "iconsax-react";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -40,6 +41,11 @@ const menuItems: MenuProps["items"] = [
     key: path.categories,
     label: "Danh mục",
     icon: <Category2 size={16} />,
+  },
+  {
+    key: path.brands,
+    label: "Thương hiệu",
+    icon: <Award size={16} />,
   },
   {
     key: path.products,

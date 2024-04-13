@@ -25,6 +25,11 @@ export const routes: Route[] = [
     layout: MainLayout,
   },
   {
+    path: path.brands,
+    component: Pages.Brand,
+    layout: MainLayout,
+  },
+  {
     path: path.products,
     component: Pages.Product,
     layout: MainLayout,
