@@ -72,3 +72,11 @@ export const BLOG_EDITOR_OPTION = {
 export const MSG_DIST: Record<string, string> = {
   DUPLICATE_RECORD: "Dữ liệu bị trùng lặp",
 };
+
+export enum CATEGORY_TYPE {
+  BLOG = 1,
+  PRODUCT = 2,
+  ABOUT = 3,
+}
+
+export const PRODUCT_UNIT = ["cái", "kg", "túi"];
