@@ -8,6 +8,7 @@ import {
   Table,
   TableProps,
   Typography,
+  Upload,
 } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { useState, useEffect, useContext } from "react";
@@ -17,13 +18,18 @@ import { categoryApi } from "../services/api/category";
 import ActionMenu from "../components/Actionmenu";
 import { antdCtx } from "../context";
 import { generateTreeData } from "../utils/functions";
-import { MSG_DIST } from "../utils/constants";
+import { FAKE_UPLOAD_URL, MSG_DIST } from "../utils/constants";
+import ImgCrop from "antd-img-crop";
+import { RcFile } from "antd/es/upload";
+import { Box, Trash } from "iconsax-react";
+import { upload } from "@/services/api/upload";
 
 function Category() {
   const { modalApi, notificationApi } = useContext(antdCtx);
   const [modalState, setModalState] = useState<ModalState<CategoryType>>({});
   const [data, setData] = useState<CategoryType[]>();
   const [loading, setLoading] = useState(false);
+  const [img, setImg] = useState<RcFile>();
 
   const parentCategoryOptions = data
     ?.filter((item) => !item.parentId)
@@ -62,26 +68,34 @@ function Category() {
   ];
 
   const handleSubmit = async (data: CategoryType) => {
-    setLoading(true);
-    const api = modalState.data
-      ? categoryApi.update(modalState.data.id, data)
-      : categoryApi.create(data);
-    api
-      .then(() => {
-        notificationApi?.success({
-          message: "Thành công",
+    try {
+      setLoading(true);
+      const imageUrl = img
+        ? (await upload(data.name, img)).data.image.url
+        : data.image;
+      const payload = { ...data, image: imageUrl };
+      const api = modalState.data
+        ? categoryApi.update(modalState.data.id, payload)
+        : categoryApi.create(payload);
+      api
+        .then(() => {
+          notificationApi?.success({
+            message: "Thành công",
+          });
+          modalState.open = false;
+          fetchData();
+        })
+        .catch((err: BaseResponse) => {
+          notificationApi?.error({
+            message: MSG_DIST[err.message] ?? "Thất bại",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
         });
-        modalState.open = false;
-        fetchData();
-      })
-      .catch((err: BaseResponse) => {
-        notificationApi?.error({
-          message: MSG_DIST[err.message] ?? "Thất bại",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const fetchData = () => {
@@ -118,6 +132,12 @@ function Category() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (!modalState.open) {
+      setImg(undefined);
+    }
+  }, [modalState]);
 
   if (!data) {
     return <TableLoading />;
@@ -171,6 +191,67 @@ function Category() {
           >
             <Input placeholder="Nhập tên danh mục" />
           </FormItem>
+
+          <Form.Item label="Hình ảnh" name="image">
+            <ImgCrop aspect={3 / 4}>
+              <Upload.Dragger
+                onChange={({ file }) => {
+                  setImg(file.originFileObj);
+                }}
+                multiple={false}
+                maxCount={1}
+                showUploadList={false}
+                accept="image/*"
+                style={{ position: "relative" }}
+                action={FAKE_UPLOAD_URL}
+              >
+                {img ? (
+                  <>
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt=""
+                      style={{
+                        height: 140,
+                        aspectRatio: "3/4",
+                        objectFit: "cover",
+                        objectPosition: "center",
+                        borderRadius: 8,
+                        overflow: "hidden",
+                      }}
+                    />
+                    <Button
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        top: 0,
+                        zIndex: 10,
+                      }}
+                      danger
+                      type="text"
+                      icon={<Trash size={20} />}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setImg(undefined);
+                      }}
+                    ></Button>
+                  </>
+                ) : (
+                  <div>
+                    <p className="ant-upload-drag-icon">
+                      <Box />
+                    </p>
+                    <p className="ant-upload-text">
+                      Chọn hoặc kéo thả hình ảnh
+                    </p>
+                    <p className="ant-upload-hint">
+                      Chọn hình ảnh có tỉ lệ 3/4 nhằm đảm bảo hiển thị tốt nhất.
+                    </p>
+                  </div>
+                )}
+              </Upload.Dragger>
+            </ImgCrop>
+          </Form.Item>
         </Form>
       </Modal>
     </>

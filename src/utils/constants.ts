@@ -80,3 +80,4 @@ export enum CATEGORY_TYPE {
 }
 
 export const PRODUCT_UNIT = ["cái", "kg", "túi"];
+export const FAKE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + "/fake";

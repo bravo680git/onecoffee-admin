@@ -8,6 +8,7 @@ import { CreateProductPayload, ProductType } from "@/services/api/type/product";
 import { upload } from "@/services/api/upload";
 import {
   CATEGORY_TYPE,
+  FAKE_UPLOAD_URL,
   PRODUCT_EDITOR_OPTION,
   PRODUCT_UNIT,
   RULES,
@@ -398,7 +399,7 @@ function ProductDetail() {
         )}
 
         <Form.Item<ProductForm> label="Ảnh sản phẩm" name="images">
-          <ImgCrop aspect={4 / 3}>
+          <ImgCrop aspect={1 / 1}>
             <Upload
               listType="picture-card"
               accept="image/*"
@@ -408,6 +409,7 @@ function ProductDetail() {
               onChange={({ fileList }) => {
                 form.setFieldValue("images", fileList);
               }}
+              action={FAKE_UPLOAD_URL}
             >
               <button
                 style={{ border: 0, background: "none", color: "#ffffff" }}

@@ -17,7 +17,7 @@ import { RcFile } from "antd/es/upload";
 import { useContext, useEffect, useState } from "react";
 import ImgCrop from "antd-img-crop";
 import { BannerType } from "../services/api/type/banner";
-import { MSG_DIST, RULES } from "../utils/constants";
+import { FAKE_UPLOAD_URL, MSG_DIST, RULES } from "../utils/constants";
 import { upload } from "../services/api/upload";
 import { bannerApi } from "../services/api/banner";
 import { antdCtx } from "../context";
@@ -239,6 +239,7 @@ function Banner() {
                   form.validateFields();
                 }}
                 multiple={false}
+                action={FAKE_UPLOAD_URL}
                 maxCount={1}
                 showUploadList={false}
                 accept="image/*"
