@@ -30,6 +30,7 @@ function Blog() {
     },
     {
       key: "category",
+      // dataIndex: ["category", "name"],
       dataIndex: "categoryId",
       title: "Danh mục",
     },
@@ -95,6 +96,7 @@ function Blog() {
             notificationApi?.success({
               message: "Thành công",
             });
+            fetchData();
           })
           .catch((err: BaseResponse) => {
             notificationApi?.error({

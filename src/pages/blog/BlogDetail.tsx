@@ -146,7 +146,7 @@ function BlogDetail() {
         <Row>
           <Col flex={"300px"}>
             <Form.Item<BlogFormType> label="Ảnh chủ đề" name="thumbnail">
-              <CropImg aspect={4 / 3}>
+              <CropImg aspect={16 / 9}>
                 <Upload.Dragger
                   onChange={handleUploadCoverImg}
                   multiple={false}
@@ -163,7 +163,7 @@ function BlogDetail() {
                         alt=""
                         style={{
                           width: 360,
-                          height: 270,
+                          height: 180,
                           objectFit: "cover",
                           objectPosition: "center",
                           borderRadius: 8,
@@ -197,7 +197,7 @@ function BlogDetail() {
                         Chọn hoặc kéo thả hình ảnh
                       </p>
                       <p className="ant-upload-hint">
-                        Chọn hình ảnh có tỉ lệ 4/3 nhằm đảm bảo hiển thị tốt
+                        Chọn hình ảnh có tỉ lệ 16/9 nhằm đảm bảo hiển thị tốt
                         nhất.
                       </p>
                     </div>
