@@ -1,4 +1,6 @@
+import { RevalidateTags } from "@/utils/constants";
 import { axiosClient } from "./axiosClient";
+import { revalidateTag } from "./revalidate";
 import {
   CreateProductPayload,
   ProductResponse,
@@ -9,8 +11,11 @@ import {
 const route = "/product";
 
 export const productApi = {
-  create(payload: CreateProductPayload) {
-    return axiosClient.post<never, BaseResponse>(route, payload);
+  async create(payload: CreateProductPayload) {
+    return axiosClient.post<never, BaseResponse>(route, payload).then((res) => {
+      revalidateTag(RevalidateTags.product);
+      return res;
+    });
   },
   getAll() {
     return axiosClient.get<never, BaseResponse<ProductsResponse>>(route);
@@ -20,15 +25,20 @@ export const productApi = {
       `${route}/${id}`
     );
   },
-  delete(id: number) {
-    return axiosClient.delete<never, BaseResponse<ProductResponse>>(
-      `${route}/${id}`
-    );
+  async delete(id: number) {
+    return axiosClient
+      .delete<never, BaseResponse<ProductResponse>>(`${route}/${id}`)
+      .then((res) => {
+        revalidateTag(RevalidateTags.product);
+        return res;
+      });
   },
-  update(id: number, payload: UpdateProductPayload) {
-    return axiosClient.patch<never, BaseResponse<ProductResponse>>(
-      `${route}/${id}`,
-      payload
-    );
+  async update(id: number, payload: UpdateProductPayload) {
+    return axiosClient
+      .patch<never, BaseResponse<ProductResponse>>(`${route}/${id}`, payload)
+      .then((res) => {
+        revalidateTag(RevalidateTags.productDetail(res.data.product.slug));
+        return res;
+      });
   },
 };

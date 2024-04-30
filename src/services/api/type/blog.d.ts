@@ -16,6 +16,7 @@ type BlogType = {
   thumbnail: string;
   categoryId: number;
   seoKeyword: string;
+  slug: string;
   seoDescription: string;
 };
 

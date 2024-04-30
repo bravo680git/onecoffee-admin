@@ -1,4 +1,6 @@
+import { RevalidateTags } from "@/utils/constants";
 import { axiosClient } from "./axiosClient";
+import { revalidateTag } from "./revalidate";
 import { BlogType, CreateBlogPayload, UpdateBlogPayload } from "./type/blog";
 
 const route = "/blog";
@@ -12,21 +14,28 @@ export const blogApi = {
       `${route}/${id}`
     );
   },
-  create(payload: CreateBlogPayload) {
-    return axiosClient.post<never, BaseResponse<{ blog: BlogType }>>(
-      route,
-      payload
-    );
+  async create(payload: CreateBlogPayload) {
+    return axiosClient
+      .post<never, BaseResponse<{ blog: BlogType }>>(route, payload)
+      .then((res) => {
+        revalidateTag(RevalidateTags.blog);
+        return res;
+      });
   },
-  update(id: number, payload: UpdateBlogPayload) {
-    return axiosClient.patch<never, BaseResponse<{ blog: BlogType }>>(
-      `${route}/${id}`,
-      payload
-    );
+  async update(id: number, payload: UpdateBlogPayload) {
+    return axiosClient
+      .patch<never, BaseResponse<{ blog: BlogType }>>(`${route}/${id}`, payload)
+      .then((res) => {
+        revalidateTag(RevalidateTags.blogDetail(res.data.blog.slug));
+        return res;
+      });
   },
-  delete(id: number) {
-    return axiosClient.delete<never, BaseResponse<{ blog: BlogType }>>(
-      `${route}/${id}`
-    );
+  async delete(id: number) {
+    return axiosClient
+      .delete<never, BaseResponse<{ blog: BlogType }>>(`${route}/${id}`)
+      .then((res) => {
+        revalidateTag(RevalidateTags.blog);
+        return res;
+      });
   },
 };

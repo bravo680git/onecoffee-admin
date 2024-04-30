@@ -1,4 +1,6 @@
+import { RevalidateTags } from "@/utils/constants";
 import { axiosClient } from "./axiosClient";
+import { revalidateTag } from "./revalidate";
 import {
   BannerListResponse,
   BannerResponse,
@@ -12,21 +14,28 @@ export const bannerApi = {
   getAll() {
     return axiosClient.get<never, BaseResponse<BannerListResponse>>(route);
   },
-  create(payload: CreateBannerPayload) {
-    return axiosClient.post<never, BaseResponse<BannerResponse>>(
-      route,
-      payload
-    );
+  async create(payload: CreateBannerPayload) {
+    return axiosClient
+      .post<never, BaseResponse<BannerResponse>>(route, payload)
+      .then((res) => {
+        revalidateTag(RevalidateTags.banner);
+        return res;
+      });
   },
-  update(id: number, payload: UpdateBannerPayload) {
-    return axiosClient.patch<never, BaseResponse<BannerResponse>>(
-      `${route}/${id}`,
-      payload
-    );
+  async update(id: number, payload: UpdateBannerPayload) {
+    return axiosClient
+      .patch<never, BaseResponse<BannerResponse>>(`${route}/${id}`, payload)
+      .then((res) => {
+        revalidateTag(RevalidateTags.banner);
+        return res;
+      });
   },
-  delete(id: number) {
-    return axiosClient.delete<never, BaseResponse<BannerResponse>>(
-      `${route}/${id}`
-    );
+  async delete(id: number) {
+    return axiosClient
+      .delete<never, BaseResponse<BannerResponse>>(`${route}/${id}`)
+      .then((res) => {
+        revalidateTag(RevalidateTags.banner);
+        return res;
+      });
   },
 };

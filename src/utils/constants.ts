@@ -81,3 +81,18 @@ export enum CATEGORY_TYPE {
 
 export const PRODUCT_UNIT = ["cái", "kg", "túi"];
 export const FAKE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + "/fake";
+export const RevalidateTags = {
+  product: "product",
+  productDetail(slug: string) {
+    return `product-${slug}`;
+  },
+  category: "category",
+  banner: "banner",
+  productRate(slug: string) {
+    return `rate-${slug}`;
+  },
+  blog: "blog",
+  blogDetail(slug: string) {
+    return `blog-${slug}`;
+  },
+};
