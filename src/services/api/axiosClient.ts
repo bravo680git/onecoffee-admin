@@ -11,7 +11,7 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.request.use((config) => {
   const token = "Bearer " + authStorage.getAccessToken();
 
-  config.headers.token = token;
+  config.headers.Authorization = token;
   return config;
 });
 
