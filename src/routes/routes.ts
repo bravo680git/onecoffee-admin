@@ -7,12 +7,14 @@ type Route = {
   path: string;
   component: React.FC;
   layout?: React.FC<{ children: React.ReactNode }>;
+  public?: boolean;
 };
 
 export const routes: Route[] = [
   {
     path: path.login,
     component: Pages.Login,
+    public: true,
   },
   {
     path: path.home,

@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { routes } from "./routes";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function AppRouter() {
   return (
@@ -14,7 +15,17 @@ export default function AppRouter() {
             <route.component></route.component>
           );
 
-          return <Route path={route.path} element={Element} key={route.path} />;
+          return (
+            <Route
+              path={route.path}
+              element={
+                <ProtectedRoute isPublic={route.public}>
+                  {Element}
+                </ProtectedRoute>
+              }
+              key={route.path}
+            />
+          );
         })}
       </Routes>
     </BrowserRouter>

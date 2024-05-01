@@ -14,4 +14,12 @@ export const authApi = {
   confirm(otp: string) {
     return axiosClient.post("/auth/confirm-otp", { otpCode: otp });
   },
+  refresh(token: string) {
+    return axiosClient.get<unknown, BaseResponse<LoginResponse>>(
+      "/auth/refresh",
+      {
+        headers: { "refresh-token": "Bearer " + token },
+      }
+    );
+  },
 };

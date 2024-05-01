@@ -9,6 +9,10 @@ import { useNavigate } from "react-router-dom";
 import { path } from "../routes/path";
 import { RULES } from "../utils/constants";
 
+const MSG: Record<string, string> = {
+  TOKEN_INCORRECT: "Mã xác thực không đúng",
+};
+
 function Login() {
   const navigate = useNavigate();
   const { notificationApi } = useContext(antdCtx);
@@ -24,9 +28,14 @@ function Login() {
         notificationApi?.success({
           message: "Đăng nhập thành công",
         });
+        authStorage.setIsLoggedIn(true);
         navigate(path.home);
       })
-      .catch()
+      .catch((err: BaseResponse) => {
+        notificationApi?.error({
+          message: MSG[err.message] ?? "Có lỗi xảy ra",
+        });
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -38,6 +47,7 @@ function Login() {
       .login(data)
       .then((res) => {
         authStorage.setAccessToken(res.data.accessToken);
+        authStorage.setRefreshToken(res.data.refreshToken);
         setInLastStep(true);
       })
       .catch()

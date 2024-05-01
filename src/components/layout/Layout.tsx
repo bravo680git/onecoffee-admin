@@ -82,6 +82,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         label: "Đăng xuất",
         icon: <LogoutCurve size={16} />,
         onClick() {
+          localStorage.clear();
           navigate(path.login);
         },
       },
@@ -141,7 +142,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           <Dropdown menu={userMenu} trigger={["click"]}>
             <Avatar
               style={{ marginLeft: "auto", cursor: "pointer" }}
-              size={48}
+              src={"/logo.png"}
+              size={36}
             />
           </Dropdown>
         </Layout.Header>
