@@ -96,3 +96,54 @@ export const RevalidateTags = {
     return `blog-${slug}`;
   },
 };
+
+export enum ORDER_STATUS {
+  NEW = "NEW",
+  CONFIRMED = "CONFIRMED",
+  DELIVERING = "DELIVERING",
+  SUCCESS = "SUCCESS",
+  CANCEL = "CANCEL",
+  NOT_EXECUTE = "NOT_EXECUTE",
+  FAIL = "FAIL",
+}
+
+export const ORDER_STATUS_DIST = {
+  [ORDER_STATUS.NEW]: {
+    title: "Đã tiếp nhận",
+    color: "#3498db",
+  },
+  [ORDER_STATUS.CONFIRMED]: {
+    title: "Đã xác nhận",
+    color: "#27ae60",
+  },
+  [ORDER_STATUS.DELIVERING]: {
+    title: "Đang vận chuyển",
+    color: "#f39c12",
+  },
+  [ORDER_STATUS.SUCCESS]: {
+    title: "Thành công",
+    color: "#2ecc71",
+  },
+  [ORDER_STATUS.CANCEL]: {
+    title: "Đã hủy",
+    color: "#e74c3c",
+  },
+  [ORDER_STATUS.NOT_EXECUTE]: {
+    title: "Không tiếp nhận",
+    color: "#95a5a6",
+  },
+  [ORDER_STATUS.FAIL]: {
+    title: "Thất bại",
+    color: "#c0392b",
+  },
+};
+
+export const ORDER_STATUS_OPTIONS_BY_CURRENT_STATUS = {
+  [ORDER_STATUS.NEW]: [ORDER_STATUS.CONFIRMED, ORDER_STATUS.NOT_EXECUTE],
+  [ORDER_STATUS.CONFIRMED]: [ORDER_STATUS.DELIVERING, ORDER_STATUS.NOT_EXECUTE],
+  [ORDER_STATUS.DELIVERING]: [ORDER_STATUS.SUCCESS, ORDER_STATUS.FAIL],
+  [ORDER_STATUS.CANCEL]: [],
+  [ORDER_STATUS.FAIL]: [],
+  [ORDER_STATUS.SUCCESS]: [],
+  [ORDER_STATUS.NOT_EXECUTE]: [],
+};
