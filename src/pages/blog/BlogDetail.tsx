@@ -18,7 +18,7 @@ import {
 import CropImg from "antd-img-crop";
 import { Box, Trash } from "iconsax-react";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -28,6 +28,9 @@ import {
   RULES,
 } from "../../utils/constants";
 import { path } from "@/routes/path";
+import QuillBlotFormatter from "quill-blot-formatter";
+
+Quill.register("modules/blotFormatter", QuillBlotFormatter);
 
 type BlogFormType = Omit<CreateBlogPayload, "thumbnail"> & {
   thumbnail: File;
@@ -243,6 +246,7 @@ function BlogDetail() {
                   image: imageHandler,
                 },
               },
+              blotFormatter: {},
             }}
             placeholder="Bạn đã biết cách bảo quản thực phẩm đúng cách?"
           />

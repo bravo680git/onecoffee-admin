@@ -21,10 +21,9 @@ axiosClient.interceptors.response.use(
   (response) => response && response.data,
   async (err) => {
     const data = err && err.response && err.response.data;
-    const config = err.config as AxiosRequestConfig & { _retry?: boolean };
+    const config = err.config as AxiosRequestConfig;
 
-    if (data.status === 401 && authStorage.getIsLoggedIn() && !config._retry) {
-      config._retry = true;
+    if (data.statusCode === 401 && authStorage.getAccessToken()) {
       try {
         const refreshToken = authStorage.getRefreshToken();
         if (!refreshToken) {
@@ -33,6 +32,10 @@ axiosClient.interceptors.response.use(
           return Promise.reject(data);
         }
         const res = await authApi.refresh(refreshToken);
+        if (!res.data) {
+          localStorage.clear();
+          location.href = path.login;
+        }
         authStorage.setAccessToken(res.data.accessToken);
         authStorage.setRefreshToken(res.data.refreshToken);
 
@@ -42,8 +45,6 @@ axiosClient.interceptors.response.use(
         };
         return axiosClient(config);
       } catch (err) {
-        localStorage.clear();
-        location.href = path.login;
         console.log(err);
       }
     }
