@@ -28,7 +28,7 @@ import {
   RULES,
 } from "../../utils/constants";
 import { path } from "@/routes/path";
-import QuillBlotFormatter from "quill-blot-formatter";
+import QuillBlotFormatter from "quill-blot-formatter/dist/BlotFormatter";
 
 Quill.register("modules/blotFormatter", QuillBlotFormatter);
 

@@ -14,3 +14,5 @@ type BaseResponse<T extends object | object[] = null> = {
   message: string;
   data: T;
 };
+
+declare module "quill-blot-formatter/dist/BlotFormatter";
