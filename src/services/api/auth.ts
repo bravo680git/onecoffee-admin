@@ -18,7 +18,7 @@ export const authApi = {
     return axiosClient.get<unknown, BaseResponse<LoginResponse>>(
       "/auth/refresh",
       {
-        headers: { "refresh-token": "Bearer " + token },
+        headers: { "refresh-token": token },
       }
     );
   },

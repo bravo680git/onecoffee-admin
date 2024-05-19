@@ -23,7 +23,11 @@ axiosClient.interceptors.response.use(
     const data = err && err.response && err.response.data;
     const config = err.config as AxiosRequestConfig;
 
-    if (data.statusCode === 401 && authStorage.getAccessToken()) {
+    if (
+      data.statusCode === 401 &&
+      authStorage.getAccessToken() &&
+      config.url !== "/auth/refresh"
+    ) {
       try {
         const refreshToken = authStorage.getRefreshToken();
         if (!refreshToken) {
@@ -45,6 +49,7 @@ axiosClient.interceptors.response.use(
         };
         return axiosClient(config);
       } catch (err) {
+        location.href = path.login;
         console.log(err);
       }
     }

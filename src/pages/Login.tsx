@@ -50,7 +50,11 @@ function Login() {
         authStorage.setRefreshToken(res.data.refreshToken);
         setInLastStep(true);
       })
-      .catch()
+      .catch(() => {
+        notificationApi?.error({
+          message: "Tài khoản không đúng",
+        });
+      })
       .finally(() => {
         setLoading(false);
       });
