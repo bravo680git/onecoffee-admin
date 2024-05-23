@@ -11,15 +11,17 @@ import {
   Typography,
 } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import { RcFile } from "antd/es/upload";
+import Upload, { RcFile } from "antd/es/upload";
 import { Key, useContext, useEffect, useState } from "react";
 import ActionMenu from "../components/Actionmenu";
 import TableLoading from "../components/loading/TableLoading";
 import { antdCtx } from "../context";
 import { categoryApi } from "../services/api/category";
 import { CategoryType } from "../services/api/type/category";
-import { CATEGORY_TYPE, MSG_DIST } from "../utils/constants";
+import { CATEGORY_TYPE, FAKE_UPLOAD_URL, MSG_DIST } from "../utils/constants";
 import { generateTreeData } from "../utils/functions";
+import ImgCrop from "antd-img-crop";
+import { Box, Trash } from "iconsax-react";
 
 function Category() {
   const { modalApi, notificationApi } = useContext(antdCtx);
@@ -140,7 +142,7 @@ function Category() {
     if (!modalState.open) {
       setImg(undefined);
     }
-  }, [modalState]);
+  }, [modalState.open]);
 
   if (!data) {
     return <TableLoading />;
@@ -199,8 +201,8 @@ function Category() {
             <Input placeholder="Nhập tên danh mục" />
           </FormItem>
 
-          {/* <Form.Item label="Hình ảnh" name="image">
-            <ImgCrop aspect={3 / 4}>
+          <Form.Item label="Icon" name="image">
+            <ImgCrop aspect={1}>
               <Upload.Dragger
                 onChange={({ file }) => {
                   setImg(file.originFileObj);
@@ -212,14 +214,16 @@ function Category() {
                 style={{ position: "relative" }}
                 action={FAKE_UPLOAD_URL}
               >
-                {img ? (
+                {img || modalState.data?.image ? (
                   <>
                     <img
-                      src={URL.createObjectURL(img)}
+                      src={
+                        img ? URL.createObjectURL(img) : modalState.data?.image
+                      }
                       alt=""
                       style={{
                         height: 140,
-                        aspectRatio: "3/4",
+                        aspectRatio: 1,
                         objectFit: "cover",
                         objectPosition: "center",
                         borderRadius: 8,
@@ -252,13 +256,13 @@ function Category() {
                       Chọn hoặc kéo thả hình ảnh
                     </p>
                     <p className="ant-upload-hint">
-                      Chọn hình ảnh có tỉ lệ 3/4 nhằm đảm bảo hiển thị tốt nhất.
+                      Chọn hình ảnh có tỉ lệ 1/1 nhằm đảm bảo hiển thị tốt nhất.
                     </p>
                   </div>
                 )}
               </Upload.Dragger>
             </ImgCrop>
-          </Form.Item> */}
+          </Form.Item>
         </Form>
       </Modal>
     </>
