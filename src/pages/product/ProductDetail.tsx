@@ -446,7 +446,7 @@ function ProductDetail() {
         </Row>
 
         <Form.Item<ProductForm> label="Ảnh sản phẩm" name="images">
-          <ImgCrop aspect={1 / 1}>
+          <ImgCrop aspect={1 / 1} fillColor="transparent">
             <Upload
               listType="picture-card"
               accept="image/*"

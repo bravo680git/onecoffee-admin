@@ -202,7 +202,7 @@ function Category() {
           </FormItem>
 
           <Form.Item label="Icon" name="image">
-            <ImgCrop aspect={1}>
+            <ImgCrop aspect={1} fillColor="transparent">
               <Upload.Dragger
                 onChange={({ file }) => {
                   setImg(file.originFileObj);
