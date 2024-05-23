@@ -81,7 +81,7 @@ function Login() {
           }}
         >
           <Space>
-            <img src="/logo.png" alt="" width={80} height={80} />
+            <img src="/one-logo-dark.png" alt="" height={60} />
             <Typography.Title level={2}>Administrator login</Typography.Title>
           </Space>
           <Form layout="vertical" onFinish={handleSubmitEmail}>

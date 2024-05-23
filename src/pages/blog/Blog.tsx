@@ -30,8 +30,8 @@ function Blog() {
     },
     {
       key: "category",
-      // dataIndex: ["category", "name"],
-      dataIndex: "categoryId",
+      dataIndex: ["category", "name"],
+      // dataIndex: "categoryId",
       title: "Danh mục",
     },
     {

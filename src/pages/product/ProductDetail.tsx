@@ -1,7 +1,6 @@
 import ProductFormLoading from "@/components/loading/ProductFormLoading";
 import { antdCtx } from "@/context";
 import { path } from "@/routes/path";
-import { brandApi } from "@/services/api/brand";
 import { categoryApi } from "@/services/api/category";
 import { productApi } from "@/services/api/product";
 import { CreateProductPayload, ProductType } from "@/services/api/type/product";
@@ -68,6 +67,7 @@ type ProductForm = {
   }[];
   images: UploadFile[];
   variantValues: Record<string | number, string | number>[];
+  extraOptions: { name: string; price: number }[];
 };
 
 type VariantValuesTableData = {
@@ -116,7 +116,6 @@ function ProductDetail() {
   const [categoryOptions, setCategoryOptions] = useState<
     SelectProps["options"]
   >([]);
-  const [brandOptions, setBrandOptions] = useState<SelectProps["options"]>([]);
   const [loading, setLoading] = useState(false);
 
   const canShowVariantValuesTable = useMemo(() => {
@@ -172,6 +171,7 @@ function ProductDetail() {
         seoKeyword: formData.seoKeyword,
         seoDescription: formData.seoDescription,
         salePercent: formData.salePercent,
+        extraOptions: formData.extraOptions,
       };
       if (formData.hasMultiOptions) {
         payload.variantProps = formData.variants;
@@ -263,15 +263,6 @@ function ProductDetail() {
       })
       .catch();
 
-    brandApi
-      .getAll()
-      .then((res) => {
-        setBrandOptions(
-          res.data.brands.map((item) => ({ label: item.name, value: item.id }))
-        );
-      })
-      .catch();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -319,7 +310,7 @@ function ProductDetail() {
               />
             </Form.Item>
           </Col>
-          <Col span={24} md={8}>
+          {/* <Col span={24} md={8}>
             <Form.Item<ProductForm> name="brandId" label="Thương hiệu">
               <Select
                 options={brandOptions}
@@ -327,17 +318,18 @@ function ProductDetail() {
                 placeholder="One"
               />
             </Form.Item>
-          </Col>
+          </Col> */}
           <Col span={24} md={8}>
             <Form.Item<ProductForm>
               name="unit"
               label="Đơn vị"
               rules={[RULES.REQUIRED]}
+              initialValue={PRODUCT_UNIT[0]}
             >
               <Select
                 options={PRODUCT_UNIT.map((u) => ({ label: u, value: u }))}
                 style={{ width: "100%" }}
-                placeholder="Cái"
+                placeholder="Ly"
               />
             </Form.Item>
           </Col>
@@ -397,6 +389,61 @@ function ProductDetail() {
             />
           </div>
         )}
+
+        <Row>
+          <Form.List name="extraOptions">
+            {(keys, { add, remove }) => (
+              <Card
+                style={{ marginBottom: 16, minWidth: 360 }}
+                styles={{ body: { padding: 16 } }}
+                title="Tùy chọn thêm"
+                extra={
+                  <Button type="primary" onClick={() => add()}>
+                    Thêm
+                  </Button>
+                }
+              >
+                {keys.map(({ key, name }) => (
+                  <Row key={key} gutter={16} style={{ marginTop: 12 }}>
+                    <Col>
+                      <Form.Item
+                        noStyle
+                        name={[name, "name"]}
+                        rules={[RULES.REQUIRED]}
+                      >
+                        <Input size="small" placeholder="Tùy chọn ..." />
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Form.Item
+                        noStyle
+                        name={[name, "price"]}
+                        rules={[RULES.REQUIRED]}
+                      >
+                        <InputNumber size="small" placeholder="10000" />
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Button
+                        size="small"
+                        type="text"
+                        danger
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        onClick={() => remove(name)}
+                      >
+                        <Trash size={16} />
+                      </Button>
+                    </Col>
+                  </Row>
+                ))}
+              </Card>
+            )}
+          </Form.List>
+        </Row>
 
         <Form.Item<ProductForm> label="Ảnh sản phẩm" name="images">
           <ImgCrop aspect={1 / 1}>

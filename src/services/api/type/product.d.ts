@@ -19,6 +19,7 @@ export type CreateProductPayload = {
     price: number;
     stockQuantity: number;
   }[];
+  extraOptions?: { name: string; price: number }[];
 };
 
 type ProductType = {
@@ -45,6 +46,7 @@ type ProductType = {
   category: {
     name: string;
   };
+  extraOptions?: { name: string; price: number }[];
 };
 
 type UpdateProductPayload = CreateProductPayload;

@@ -1,28 +1,25 @@
+import { upload } from "@/services/api/upload";
 import {
   Button,
   Form,
   Input,
   Modal,
   Row,
-  Select,
   Table,
   TableProps,
+  TreeSelect,
   Typography,
-  Upload,
 } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import { useState, useEffect, useContext } from "react";
-import TableLoading from "../components/loading/TableLoading";
-import { CategoryType } from "../services/api/type/category";
-import { categoryApi } from "../services/api/category";
-import ActionMenu from "../components/Actionmenu";
-import { antdCtx } from "../context";
-import { generateTreeData } from "../utils/functions";
-import { FAKE_UPLOAD_URL, MSG_DIST } from "../utils/constants";
-import ImgCrop from "antd-img-crop";
 import { RcFile } from "antd/es/upload";
-import { Box, Trash } from "iconsax-react";
-import { upload } from "@/services/api/upload";
+import { Key, useContext, useEffect, useState } from "react";
+import ActionMenu from "../components/Actionmenu";
+import TableLoading from "../components/loading/TableLoading";
+import { antdCtx } from "../context";
+import { categoryApi } from "../services/api/category";
+import { CategoryType } from "../services/api/type/category";
+import { CATEGORY_TYPE, MSG_DIST } from "../utils/constants";
+import { generateTreeData } from "../utils/functions";
 
 function Category() {
   const { modalApi, notificationApi } = useContext(antdCtx);
@@ -30,11 +27,16 @@ function Category() {
   const [data, setData] = useState<CategoryType[]>();
   const [loading, setLoading] = useState(false);
   const [img, setImg] = useState<RcFile>();
+  const [expandKeys, setExpandKeys] = useState<readonly Key[]>([]);
 
-  const parentCategoryOptions = data
-    ?.filter((item) => !item.parentId)
-    .map((item) => ({ value: item.id, label: item.name }));
-  const treeData = generateTreeData(data, (item) => item);
+  const treeData = generateTreeData(data, (item) => ({
+    ...item,
+    label: item.name,
+    value: item.id,
+  })).filter(
+    (item) =>
+      item.id === CATEGORY_TYPE.BLOG || item.id === CATEGORY_TYPE.PRODUCT
+  );
 
   const columns: TableProps<CategoryType>["columns"] = [
     {
@@ -103,6 +105,7 @@ function Category() {
       .getAll()
       .then((res) => {
         setData(res.data.categories);
+        setExpandKeys(res.data.categories.map((i) => i.id));
       })
       .catch();
   };
@@ -156,6 +159,10 @@ function Category() {
         columns={columns}
         dataSource={treeData}
         rowKey="id"
+        expandable={{
+          expandedRowKeys: expandKeys,
+          onExpandedRowsChange: (keys) => setExpandKeys(keys),
+        }}
       ></Table>
 
       <Modal
@@ -177,10 +184,10 @@ function Category() {
             name="parentId"
             rules={[{ required: true, message: "Danh mục cha là bắt buộc" }]}
           >
-            <Select
+            <TreeSelect
               style={{ width: "100%" }}
               placeholder="Chọn danh mục cha"
-              options={parentCategoryOptions}
+              treeData={treeData}
             />
           </FormItem>
           <FormItem
@@ -192,7 +199,7 @@ function Category() {
             <Input placeholder="Nhập tên danh mục" />
           </FormItem>
 
-          <Form.Item label="Hình ảnh" name="image">
+          {/* <Form.Item label="Hình ảnh" name="image">
             <ImgCrop aspect={3 / 4}>
               <Upload.Dragger
                 onChange={({ file }) => {
@@ -251,7 +258,7 @@ function Category() {
                 )}
               </Upload.Dragger>
             </ImgCrop>
-          </Form.Item>
+          </Form.Item> */}
         </Form>
       </Modal>
     </>

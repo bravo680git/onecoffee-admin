@@ -231,7 +231,7 @@ function Banner() {
             rules={[RULES.REQUIRED]}
             name="image"
           >
-            <ImgCrop aspect={4}>
+            <ImgCrop aspect={3.2}>
               <Upload.Dragger
                 onChange={({ file }) => {
                   setImgSrc(URL.createObjectURL(file.originFileObj as RcFile));
@@ -252,7 +252,7 @@ function Banner() {
                       alt=""
                       style={{
                         width: "100%",
-                        aspectRatio: "4/1",
+                        aspectRatio: 3.2,
                         objectFit: "cover",
                         objectPosition: "center",
                         borderRadius: 8,
@@ -286,7 +286,7 @@ function Banner() {
                       Chọn hoặc kéo thả hình ảnh
                     </p>
                     <p className="ant-upload-hint">
-                      Chọn hình ảnh có tỉ lệ 4/1 nhằm đảm bảo hiển thị tốt nhất.
+                      Chọn hình ảnh có tỉ lệ 3/1 nhằm đảm bảo hiển thị tốt nhất.
                     </p>
                   </div>
                 )}

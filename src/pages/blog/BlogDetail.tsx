@@ -1,4 +1,5 @@
 import { antdCtx } from "@/context";
+import { path } from "@/routes/path";
 import { blogApi } from "@/services/api/blog";
 import { categoryApi } from "@/services/api/category";
 import { CreateBlogPayload } from "@/services/api/type/blog";
@@ -17,6 +18,7 @@ import {
 } from "antd";
 import CropImg from "antd-img-crop";
 import { Box, Trash } from "iconsax-react";
+import QuillBlotFormatter from "quill-blot-formatter/dist/BlotFormatter";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -27,8 +29,6 @@ import {
   FAKE_UPLOAD_URL,
   RULES,
 } from "../../utils/constants";
-import { path } from "@/routes/path";
-import QuillBlotFormatter from "quill-blot-formatter/dist/BlotFormatter";
 
 Quill.register("modules/blotFormatter", QuillBlotFormatter);
 
@@ -40,7 +40,7 @@ function BlogDetail() {
   const { id } = useParams();
   const reactQuillRef = useRef<ReactQuill>(null);
   const [form] = Form.useForm<BlogFormType>();
-  const { notificationApi } = useContext(antdCtx);
+  const { notificationApi, modalApi } = useContext(antdCtx);
   const navigate = useNavigate();
 
   const inCreateMode = id === "new";
@@ -112,6 +112,36 @@ function BlogDetail() {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handlePreview = () => {
+    const title = form.getFieldValue("title");
+    const content = form.getFieldValue("content");
+    modalApi?.info({
+      title: (
+        <Typography.Title level={4}>{title || "Preview"}</Typography.Title>
+      ),
+      closable: true,
+      icon: null,
+      content: (
+        <div
+          style={{
+            backgroundColor: "white",
+            color: "black",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            maxHeight: window.innerHeight - 180,
+            overflow: "auto",
+          }}
+          className="ql-editor"
+        >
+          <div dangerouslySetInnerHTML={{ __html: content }}></div>
+        </div>
+      ),
+      style: { width: "100%" },
+      width: "90%",
+      centered: true,
+    });
   };
 
   useEffect(() => {
@@ -271,12 +301,17 @@ function BlogDetail() {
             </Form.Item>
           </Col>
         </Row>
-        <Row>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              {inCreateMode ? "Tạo bài viết" : "Cập nhật bài viết"}
-            </Button>
-          </Form.Item>
+        <Row gutter={16}>
+          <Col>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" loading={loading}>
+                {inCreateMode ? "Tạo bài viết" : "Cập nhật bài viết"}
+              </Button>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Button onClick={handlePreview}>Preview</Button>
+          </Col>
         </Row>
       </Form>
     </div>

@@ -8,23 +8,19 @@ import {
   MenuProps,
   theme,
 } from "antd";
-import React from "react";
+import {
+  ArrowLeft2,
+  Blogger,
+  Box,
+  Category2,
+  Home,
+  Image,
+  LogoutCurve,
+} from "iconsax-react";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { path } from "../../routes/path";
 import { border } from "../../theme/constants";
-import {
-  Home,
-  Category2,
-  ArrowLeft2,
-  LogoutCurve,
-  Box,
-  User,
-  Blogger,
-  ShoppingCart,
-  Image,
-  Award,
-} from "iconsax-react";
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 
 const menuItems: MenuProps["items"] = [
   {
@@ -42,31 +38,31 @@ const menuItems: MenuProps["items"] = [
     label: "Danh mục",
     icon: <Category2 size={16} />,
   },
-  {
-    key: path.brands,
-    label: "Thương hiệu",
-    icon: <Award size={16} />,
-  },
+  // {
+  //   key: path.brands,
+  //   label: "Thương hiệu",
+  //   icon: <Award size={16} />,
+  // },
   {
     key: path.products,
     label: "Sản phẩm",
     icon: <Box size={16} />,
   },
-  {
-    key: path.users,
-    label: "Khách hàng",
-    icon: <User size={16} />,
-  },
+  // {
+  //   key: path.users,
+  //   label: "Khách hàng",
+  //   icon: <User size={16} />,
+  // },
   {
     key: path.blogs,
     label: "Bài viết",
     icon: <Blogger size={16} />,
   },
-  {
-    key: path.orders,
-    label: "Đơn hàng",
-    icon: <ShoppingCart size={16} />,
-  },
+  // {
+  //   key: path.orders,
+  //   label: "Đơn hàng",
+  //   icon: <ShoppingCart size={16} />,
+  // },
 ];
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -108,7 +104,11 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         collapsed={!open}
       >
         <div style={{ padding: 16, paddingTop: 32, display: "flex" }}>
-          <img src="/logo.png" alt="" style={{ maxWidth: "100%" }} />
+          <img
+            src={open ? "/one-logo-dark.png" : "/logo.png"}
+            alt=""
+            style={{ maxWidth: "100%" }}
+          />
         </div>
         <Menu
           items={menuItems}
@@ -142,7 +142,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           <Dropdown menu={userMenu} trigger={["click"]}>
             <Avatar
               style={{ marginLeft: "auto", cursor: "pointer" }}
-              src={"/logo.png"}
+              src={"/one-logo.png"}
               size={36}
             />
           </Dropdown>

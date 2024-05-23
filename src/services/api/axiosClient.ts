@@ -24,7 +24,7 @@ axiosClient.interceptors.response.use(
     const config = err.config as AxiosRequestConfig;
 
     if (
-      data.statusCode === 401 &&
+      data?.statusCode === 401 &&
       authStorage.getAccessToken() &&
       config.url !== "/auth/refresh"
     ) {
