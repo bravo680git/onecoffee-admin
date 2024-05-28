@@ -66,6 +66,11 @@ export const BLOG_EDITOR_OPTION = {
     "size",
     "image",
     "blockquote",
+    "alt",
+    "height",
+    "width",
+    "style",
+    "size",
   ],
 };
 

@@ -37,7 +37,13 @@ function Product() {
     {
       key: "price",
       dataIndex: "price",
-      title: "Giá gốc",
+      title: "Giá",
+      render(_, record) {
+        if (record.minPrice !== record.maxPrice) {
+          return `${record.minPrice} - ${record.maxPrice}`;
+        }
+        return record.price;
+      },
     },
     {
       key: "salePrice",

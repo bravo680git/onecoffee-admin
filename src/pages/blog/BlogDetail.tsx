@@ -20,7 +20,7 @@ import CropImg from "antd-img-crop";
 import { Box, Trash } from "iconsax-react";
 import QuillBlotFormatter from "quill-blot-formatter/dist/BlotFormatter";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import ReactQuill, { Quill } from "react-quill";
+import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -30,7 +30,7 @@ import {
   RULES,
 } from "../../utils/constants";
 
-Quill.register("modules/blotFormatter", QuillBlotFormatter);
+ReactQuill.Quill.register("modules/blotFormatter", QuillBlotFormatter);
 
 type BlogFormType = Omit<CreateBlogPayload, "thumbnail"> & {
   thumbnail: File;
