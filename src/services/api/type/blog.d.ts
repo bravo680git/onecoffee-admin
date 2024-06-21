@@ -9,7 +9,7 @@ export type CreateBlogPayload = {
 
 type BlogType = {
   id: number;
-  createdAt: string;
+  createdAt?: string;
   updatedAt: string;
   title: string;
   content: string;

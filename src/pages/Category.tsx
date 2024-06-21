@@ -18,7 +18,12 @@ import TableLoading from "../components/loading/TableLoading";
 import { antdCtx } from "../context";
 import { categoryApi } from "../services/api/category";
 import { CategoryType } from "../services/api/type/category";
-import { CATEGORY_TYPE, FAKE_UPLOAD_URL, MSG_DIST } from "../utils/constants";
+import {
+  Action,
+  CATEGORY_TYPE,
+  FAKE_UPLOAD_URL,
+  MSG_DIST,
+} from "../utils/constants";
 import { generateTreeData } from "../utils/functions";
 import ImgCrop from "antd-img-crop";
 import { Box, Trash } from "iconsax-react";
@@ -55,10 +60,14 @@ function Category() {
       width: 120,
       align: "center",
       render(_, record) {
+        const actions: (keyof typeof Action)[] = ["edit"];
+        if (record.createdAt) {
+          actions.push("delete");
+        }
         return (
           record.parentId && (
             <ActionMenu
-              actions={["edit", "delete"]}
+              actions={actions}
               onDelete={() => handleDelete(record)}
               onEdit={() => setModalState({ open: true, data: record })}
             />
