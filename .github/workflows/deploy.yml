@@ -56,6 +56,7 @@ jobs:
           echo "$SSH_KEY" > key.pem
           chmod 600 key.pem
           ssh -tt -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST \
-          "docker rmi -f $IMAGE_NAME:$IMAGE_TAG && \
-            docker pull $IMAGE_NAME:$IMAGE_TAG && \
-            docker run -d -p $PORT:80  $IMAGE_NAME:$IMAGE_TAG"
+          "docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME) && \
+          docker rmi -f $IMAGE_NAME:$IMAGE_TAG && \
+          docker pull $IMAGE_NAME:$IMAGE_TAG && \
+          docker run -d -p $PORT:80  $IMAGE_NAME:$IMAGE_TAG"
