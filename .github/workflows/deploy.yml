@@ -58,7 +58,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST "     
             CONTAINER_ID=$(docker ps -q --filter ancestor=$IMAGE_NAME:$IMAGE_TAG)
             if [ ! -z "$CONTAINER_ID" ]; then
-              echo "Stopping existing container(s): $CONTAINER_ID"
+              echo "Stopping existing container: $CONTAINER_ID"
               docker stop $CONTAINER_ID
             else
               echo "No running containers found for image $IMAGE_NAME:$IMAGE_TAG"
