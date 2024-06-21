@@ -7,6 +7,7 @@ import { Button, Row, Table, TableProps, Typography } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { path } from "../../routes/path";
+import { Action } from "@/utils/constants";
 
 function Blog() {
   const navigate = useNavigate();
@@ -60,9 +61,13 @@ function Blog() {
       key: "action",
       title: "Hành động",
       render(_, record) {
+        const actions: (keyof typeof Action)[] = ["edit"];
+        if (record.createdAt) {
+          actions.push("delete");
+        }
         return (
           <ActionMenu
-            actions={["edit", "delete"]}
+            actions={actions}
             onEdit={() => navigate(`${path.blogs}/${record.id}`)}
             onDelete={() => handleDelete(record.id)}
           />

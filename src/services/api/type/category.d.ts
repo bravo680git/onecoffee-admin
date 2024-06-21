@@ -9,6 +9,7 @@ type CategoryType = {
   name: string;
   parentId?: number;
   image?: string;
+  createdAt?: string;
 };
 
 type CategoriesResponse = {
