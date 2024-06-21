@@ -13,7 +13,6 @@ import {
   Blogger,
   Box,
   Category2,
-  Home,
   Image,
   LogoutCurve,
 } from "iconsax-react";
@@ -23,11 +22,11 @@ import { path } from "../../routes/path";
 import { border } from "../../theme/constants";
 
 const menuItems: MenuProps["items"] = [
-  {
-    key: path.home,
-    label: "Trang chủ",
-    icon: <Home size={16} />,
-  },
+  // {
+  //   key: path.home,
+  //   label: "Trang chủ",
+  //   icon: <Home size={16} />,
+  // },
   {
     key: path.banners,
     label: "Banner",
