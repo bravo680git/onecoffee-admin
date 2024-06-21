@@ -55,8 +55,15 @@ jobs:
         run: |
           echo "$SSH_KEY" > key.pem
           chmod 600 key.pem
-          ssh -tt -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST \
-          "docker stop $(docker ps -q --filter ancestor=$IMAGE_NAME) && \
-          docker rmi -f $IMAGE_NAME:$IMAGE_TAG && \
-          docker pull $IMAGE_NAME:$IMAGE_TAG && \
-          docker run -d -p $PORT:80  $IMAGE_NAME:$IMAGE_TAG"
+          ssh -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST "     
+            CONTAINER_ID=$(docker ps -q --filter ancestor=$IMAGE_NAME:$IMAGE_TAG)
+            if [ ! -z "$CONTAINER_ID" ]; then
+              echo "Stopping existing container(s): $CONTAINER_ID"
+              docker stop $CONTAINER_ID
+            else
+              echo "No running containers found for image $IMAGE_NAME:$IMAGE_TAG"
+            fi
+            docker rmi -f $IMAGE_NAME:$IMAGE_TAG || echo "No previous image to remove"
+            docker pull $IMAGE_NAME:$IMAGE_TAG
+            docker run -d -p $PORT:80 $IMAGE_NAME:$IMAGE_TAG
+          "
