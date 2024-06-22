@@ -38,6 +38,7 @@ export const productApi = {
       .patch<never, BaseResponse<ProductResponse>>(`${route}/${id}`, payload)
       .then((res) => {
         revalidateTag(RevalidateTags.productDetail(res.data.product.slug));
+        revalidateTag(RevalidateTags.product);
         return res;
       });
   },
