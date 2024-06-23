@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "$SSH_KEY" > key.pem
           chmod 600 key.pem
-          ssh -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST "     
+          ssh -tt -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST "     
             CONTAINER_ID=$(docker ps -q --filter ancestor=$IMAGE_NAME:$IMAGE_TAG)
             if [ ! -z "$CONTAINER_ID" ]; then
               echo "Stopping existing container: $CONTAINER_ID"
