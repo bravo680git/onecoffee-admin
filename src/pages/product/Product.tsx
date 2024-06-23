@@ -1,19 +1,39 @@
-import { Button, Row, Table, TableProps, Typography } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Input,
+  Row,
+  Select,
+  SelectProps,
+  Space,
+  Switch,
+  Table,
+  TableProps,
+  Typography,
+} from "antd";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { path } from "../../routes/path";
-import { useState, useEffect, useContext } from "react";
-import { ProductType } from "../../services/api/type/product";
-import { productApi } from "../../services/api/product";
-import TableLoading from "../../components/loading/TableLoading";
 import ActionMenu from "../../components/Actionmenu";
+import TableLoading from "../../components/loading/TableLoading";
 import { antdCtx } from "../../context";
-import { MSG_DIST } from "../../utils/constants";
+import { path } from "../../routes/path";
+import { productApi } from "../../services/api/product";
+import { ProductType } from "../../services/api/type/product";
+import { CATEGORY_TYPE, MSG_DIST } from "../../utils/constants";
+import { SearchNormal } from "iconsax-react";
+import { stringTest } from "@/utils/functions";
+import { categoryApi } from "@/services/api/category";
 
 function Product() {
   const navigate = useNavigate();
   const { modalApi, notificationApi } = useContext(antdCtx);
 
   const [items, setItems] = useState<ProductType[]>();
+  const [catOpts, setCatOpts] = useState<SelectProps["options"]>([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [category, setCategory] = useState<number>();
+  const [pin, setPin] = useState(false);
 
   const columns: TableProps<ProductType>["columns"] = [
     {
@@ -28,11 +48,15 @@ function Product() {
       key: "name",
       dataIndex: "name",
       title: "Tên sản phẩm",
+      filtered: true,
     },
     {
       key: "category",
       dataIndex: ["category", "name"],
       title: "Danh mục",
+      sorter(a, b) {
+        return a.category > b.category ? 1 : -1;
+      },
     },
     {
       key: "price",
@@ -44,11 +68,17 @@ function Product() {
         }
         return record.price;
       },
+      sorter(a, b) {
+        return a.minPrice - b.minPrice;
+      },
     },
     {
       key: "salePrice",
       dataIndex: "salePercent",
       title: "Khuyến mãi(%)",
+      sorter(a, b) {
+        return a.salePercent - b.salePercent;
+      },
     },
     {
       key: "pin",
@@ -76,6 +106,16 @@ function Product() {
       align: "center",
     },
   ];
+
+  const filteredItems = useMemo(() => {
+    return items?.filter((item) => {
+      return (
+        (!category || category === item.categoryId) &&
+        stringTest(item.name, searchInput) &&
+        (!pin || item.pin)
+      );
+    });
+  }, [items, searchInput, category, pin]);
 
   const handleDelete = (record: ProductType) => {
     modalApi?.error({
@@ -113,6 +153,19 @@ function Product() {
 
   useEffect(() => {
     fetchData();
+    categoryApi
+      .getAll()
+      .then((res) => {
+        setCatOpts(
+          res.data.categories
+            ?.filter((item) => item.parentId === CATEGORY_TYPE.PRODUCT)
+            ?.map((item) => ({
+              label: item.name,
+              value: item.id,
+            }))
+        );
+      })
+      .catch();
   }, []);
 
   if (!items) {
@@ -127,7 +180,39 @@ function Product() {
           Thêm mới
         </Button>
       </Row>
-      <Table bordered columns={columns} dataSource={items} rowKey="id"></Table>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={filteredItems}
+        rowKey="id"
+        title={() => (
+          <Row gutter={[16, 16]} align="middle">
+            <Col>
+              <Input
+                prefix={<SearchNormal size={20} />}
+                placeholder="Tìm kiếm"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </Col>
+            <Col>
+              <Select
+                style={{ width: 160 }}
+                placeholder={"Danh mục"}
+                options={catOpts}
+                value={category}
+                onChange={setCategory}
+              />
+            </Col>
+            <Col>
+              <Space>
+                <Switch value={pin} onChange={setPin} />
+                <span>Pin</span>
+              </Space>
+            </Col>
+          </Row>
+        )}
+      ></Table>
     </>
   );
 }

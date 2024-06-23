@@ -49,3 +49,35 @@ export const transformCurrency = (price?: number, salePercent?: number) => {
 
   return "₫" + parts.join(".");
 };
+
+export const stringTest = (
+  value: string | number,
+  searchStr: string | number | null
+) => {
+  if (!value || !searchStr) {
+    return true;
+  }
+
+  const normalizedKeyword = searchStr
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+
+  const normalizedString = value
+    .toString()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d");
+
+  return normalizedString.includes(normalizedKeyword);
+};
+
+export const handleFilterOption = (
+  search: string,
+  option?: { label: string; value: string }
+) => {
+  return stringTest(option?.label ?? "", search);
+};

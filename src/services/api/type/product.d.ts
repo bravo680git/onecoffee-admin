@@ -44,6 +44,7 @@ type ProductType = {
     price: number;
     stockQuantity: number;
   }[];
+  categoryId: number;
   category: {
     name: string;
   };
