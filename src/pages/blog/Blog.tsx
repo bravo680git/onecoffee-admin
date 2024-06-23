@@ -3,17 +3,33 @@ import TableLoading from "@/components/loading/TableLoading";
 import { antdCtx } from "@/context";
 import { blogApi } from "@/services/api/blog";
 import { BlogType } from "@/services/api/type/blog";
-import { Button, Row, Table, TableProps, Typography } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { Action, CATEGORY_TYPE } from "@/utils/constants";
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Select,
+  SelectProps,
+  Table,
+  TableProps,
+  Typography,
+} from "antd";
+import { SearchNormal } from "iconsax-react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { path } from "../../routes/path";
-import { Action } from "@/utils/constants";
+import { stringTest } from "@/utils/functions";
+import { categoryApi } from "@/services/api/category";
 
 function Blog() {
   const navigate = useNavigate();
   const { modalApi, notificationApi } = useContext(antdCtx);
 
   const [items, setItems] = useState<BlogType[]>();
+  const [searchInput, setSearchInput] = useState("");
+  const [category, setCategory] = useState<number>();
+  const [catOpts, setCatOpts] = useState<SelectProps["options"]>([]);
 
   const columns: TableProps<BlogType>["columns"] = [
     {
@@ -34,6 +50,9 @@ function Blog() {
       dataIndex: ["category", "name"],
       // dataIndex: "categoryId",
       title: "Danh mục",
+      sorter(a, b) {
+        return a.categoryId - b.categoryId;
+      },
     },
     {
       key: "createdAt",
@@ -47,6 +66,9 @@ function Blog() {
             })
           : "";
       },
+      sorter(a, b) {
+        return (a.createdAt ?? "") > (b.createdAt ?? "") ? 1 : -1;
+      },
     },
     {
       key: "lastVerify",
@@ -57,6 +79,9 @@ function Blog() {
           dateStyle: "short",
           timeStyle: "short",
         });
+      },
+      sorter(a, b) {
+        return (a.updatedAt ?? "") > (b.updatedAt ?? "") ? 1 : -1;
       },
     },
     {
@@ -79,6 +104,15 @@ function Blog() {
       align: "center",
     },
   ];
+
+  const filteredItems = useMemo(() => {
+    return items?.filter((item) => {
+      return (
+        (!category || category === item.categoryId) &&
+        stringTest(item.title, searchInput)
+      );
+    });
+  }, [items, category, searchInput]);
 
   const fetchData = () => {
     blogApi
@@ -116,6 +150,16 @@ function Blog() {
 
   useEffect(() => {
     fetchData();
+    categoryApi.getAll().then((res) => {
+      setCatOpts(
+        res.data.categories
+          .filter((item) => item.parentId === CATEGORY_TYPE.BLOG)
+          .map((item) => ({
+            label: item.name,
+            value: item.id,
+          }))
+      );
+    });
   }, []);
 
   if (!items) {
@@ -130,7 +174,34 @@ function Blog() {
           Thêm mới
         </Button>
       </Row>
-      <Table bordered columns={columns} dataSource={items} rowKey="id"></Table>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={filteredItems}
+        rowKey="id"
+        title={() => (
+          <Row gutter={[16, 16]} align="middle">
+            <Col>
+              <Input
+                prefix={<SearchNormal size={20} />}
+                placeholder="Tìm kiếm"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </Col>
+            <Col>
+              <Select
+                style={{ minWidth: 240 }}
+                placeholder={"Danh mục"}
+                options={catOpts}
+                value={category}
+                onChange={setCategory}
+                allowClear
+              />
+            </Col>
+          </Row>
+        )}
+      ></Table>
     </>
   );
 }
