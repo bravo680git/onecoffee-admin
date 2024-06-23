@@ -51,6 +51,15 @@ function Product() {
       title: "Khuyến mãi(%)",
     },
     {
+      key: "pin",
+      dataIndex: "pin",
+      title: "Pin",
+      render(value: boolean) {
+        return <Checkbox checked={value} />;
+      },
+      align: "center",
+    },
+    {
       key: "action",
       title: "Hành động",
       render(_, record) {

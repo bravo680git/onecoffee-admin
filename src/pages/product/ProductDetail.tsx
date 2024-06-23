@@ -68,6 +68,7 @@ type ProductForm = {
   images: UploadFile[];
   variantValues: Record<string | number, string | number>[];
   extraOptions: { name: string; price: number }[];
+  pin: boolean;
 };
 
 type VariantValuesTableData = {
@@ -172,6 +173,7 @@ function ProductDetail() {
         seoDescription: formData.seoDescription,
         salePercent: formData.salePercent,
         extraOptions: formData.extraOptions,
+        pin: formData.pin,
       };
       if (formData.hasMultiOptions) {
         payload.variantProps = formData.variants;
@@ -334,6 +336,15 @@ function ProductDetail() {
             </Form.Item>
           </Col>
           <Col span={24} md={8}>
+            <Form.Item<ProductForm>
+              label=" "
+              name="pin"
+              valuePropName="checked"
+            >
+              <Checkbox>Pin lên trang chủ</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col span={24} md={8}>
             <Form.Item<ProductForm> name="salePercent" label="Khuyến mãi">
               <InputNumber style={{ width: "100%" }} placeholder="33.33%" />
             </Form.Item>
@@ -352,7 +363,11 @@ function ProductDetail() {
         {!hasMultiOptions ? (
           <Row gutter={[16, 16]}>
             <Col span={24} md={8}>
-              <Form.Item<ProductForm> name="price" label="Giá gốc">
+              <Form.Item<ProductForm>
+                name="price"
+                label="Giá gốc"
+                rules={[RULES.REQUIRED]}
+              >
                 <InputNumber style={{ width: "100%" }} placeholder="167000đ" />
               </Form.Item>
             </Col>
