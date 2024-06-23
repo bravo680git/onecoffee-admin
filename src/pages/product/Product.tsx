@@ -202,6 +202,7 @@ function Product() {
                 options={catOpts}
                 value={category}
                 onChange={setCategory}
+                allowClear
               />
             </Col>
             <Col>
