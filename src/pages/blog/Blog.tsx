@@ -40,10 +40,12 @@ function Blog() {
       dataIndex: "createdAt",
       title: "Ngày tạo",
       render(value) {
-        return new Date(value).toLocaleString("vi", {
-          dateStyle: "short",
-          timeStyle: "short",
-        });
+        return value
+          ? new Date(value).toLocaleString("vi", {
+              dateStyle: "short",
+              timeStyle: "short",
+            })
+          : "";
       },
     },
     {
