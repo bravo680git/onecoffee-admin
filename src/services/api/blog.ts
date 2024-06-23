@@ -27,6 +27,7 @@ export const blogApi = {
       .patch<never, BaseResponse<{ blog: BlogType }>>(`${route}/${id}`, payload)
       .then((res) => {
         revalidateTag(RevalidateTags.blogDetail(res.data.blog.slug));
+        revalidateTag(RevalidateTags.blog);
         return res;
       });
   },

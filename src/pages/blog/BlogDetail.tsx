@@ -250,15 +250,17 @@ function BlogDetail() {
               <Input placeholder="Bạn đã biết cách bảo quản thực phẩm đúng cách?" />
             </Form.Item>
           </Col>
-          <Col span={24} md={8}>
-            <Form.Item<BlogFormType>
-              label="Danh mục"
-              name="categoryId"
-              rules={[RULES.REQUIRED]}
-            >
-              <Select placeholder="Mẹo vặt" options={categoryOptions} />
-            </Form.Item>
-          </Col>
+          {(inCreateMode || form.getFieldValue("createdAt")) && (
+            <Col span={24} md={8}>
+              <Form.Item<BlogFormType>
+                label="Danh mục"
+                name="categoryId"
+                rules={[RULES.REQUIRED]}
+              >
+                <Select placeholder="Mẹo vặt" options={categoryOptions} />
+              </Form.Item>
+            </Col>
+          )}
         </Row>
         <Form.Item<BlogFormType>
           label="Nội dung bài viết"

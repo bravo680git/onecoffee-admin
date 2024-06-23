@@ -20,6 +20,7 @@ export type CreateProductPayload = {
     stockQuantity: number;
   }[];
   extraOptions?: { name: string; price: number }[];
+  pin: boolean;
 };
 
 type ProductType = {
@@ -43,10 +44,12 @@ type ProductType = {
     price: number;
     stockQuantity: number;
   }[];
+  categoryId: number;
   category: {
     name: string;
   };
   extraOptions?: { name: string; price: number }[];
+  pin: boolean;
 };
 
 type UpdateProductPayload = CreateProductPayload;
