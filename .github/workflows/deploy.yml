@@ -67,3 +67,19 @@ jobs:
             echo \"docker-compose.yaml not found in $WEB_FOLDER\" && \
             exit 1; \
           fi"
+
+      - name: Send Telegram notification on success
+        if: success()
+        run: |
+          curl -s -X POST \
+          -d chat_id="${{ secrets.TELE_CHANNEL_ID }}" \
+          -d text="🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
+          https://api.telegram.org/bot"${{ secrets.TELE_TOKEN }}"/sendMessage
+
+      - name: Send Telegram notification on failure
+        if: failure()
+        run: |
+          curl -s -X POST \
+          -d chat_id="${{ secrets.TELE_CHANNEL_ID }}" \
+          -d text="❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
+           https://api.telegram.org/bot"${{ secrets.TELE_TOKEN }}"/sendMessage
