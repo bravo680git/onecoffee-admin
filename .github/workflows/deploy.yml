@@ -1,18 +1,19 @@
 name: Deploy to EC2
-run-name: Deploy to EC2
 on:
   push:
     branches:
       - main
+
 env:
   IMAGE_NAME: bravo680/onecoffee-admin-web
   IMAGE_TAG: latest
   WEB_FOLDER: /var/www/onecoffee-admin-web
+
 jobs:
   Lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository code
+      - name: Checkout repository
         uses: actions/checkout@v4
         
       - name: Set up nodejs
@@ -25,36 +26,41 @@ jobs:
           npm i -g pnpm
           pnpm i
           pnpm lint
-          
-  Deploy:
+
+  BuildAndPushImage:
     runs-on: ubuntu-latest
     needs: Lint
     steps:
-      - name: Check out repository code
+      - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Build docker image
+      - name: Build and push Docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           echo "${{ secrets.ENVS }}" > .env
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
-          
-      - name: Login to docker hub
-        uses: docker/login-action@v3.2.0
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          
-      - name: Push to docker hub
-        run: docker push $IMAGE_NAME:$IMAGE_TAG
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker push $IMAGE_NAME:$IMAGE_TAG
+
+  DeployToEC2:
+    runs-on: ubuntu-latest
+    needs: [BuildAndPushImage]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
         
+      - name: Setup SSH key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+
       - name: Deploy to EC2
         env:
-          SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
         run: |
-          echo "$SSH_KEY" > key.pem
-          chmod 600 key.pem
           ssh -tt -o StrictHostKeyChecking=no -i key.pem $SSH_USER@$SSH_HOST \
           "cd $WEB_FOLDER && \
           if [ -f docker-compose.yaml ]; then \
@@ -68,19 +74,26 @@ jobs:
             exit 1; \
           fi"
 
-      - name: Send Telegram notification on success
-        if: success()
+  NotifyOnSuccess:
+    runs-on: ubuntu-latest
+    needs: [DeployToEC2]
+    if: success()
+    steps:
+      - name: Notify Telegram on success
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELE_CHANNEL_ID }}
           token: ${{ secrets.TELE_TOKEN }}
-          message: "🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
+          message: "🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }} | Project: ONe coffee admin web"
 
-      - name: Send Telegram notification on failure
-        if: failure()
+  NotifyOnFailure:
+    runs-on: ubuntu-latest
+    needs: [DeployToEC2]
+    if: failure()
+    steps:
+      - name: Notify Telegram on failure
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELE_CHANNEL_ID }}
           token: ${{ secrets.TELE_TOKEN }}
-          message: "❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
-        
+          message: "❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }} | Project: ONe coffee admin web"
