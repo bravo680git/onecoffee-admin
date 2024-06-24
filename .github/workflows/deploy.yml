@@ -70,16 +70,17 @@ jobs:
 
       - name: Send Telegram notification on success
         if: success()
-        run: |
-          curl -s -X POST \
-          -d chat_id="${{ secrets.TELE_CHANNEL_ID }}" \
-          -d text="🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
-          https://api.telegram.org/bot"${{ secrets.TELE_TOKEN }}"/sendMessage
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELE_CHANNEL_ID }}
+          token: ${{ secrets.TELE_TOKEN }}
+          message: "🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
 
       - name: Send Telegram notification on failure
         if: failure()
-        run: |
-          curl -s -X POST \
-          -d chat_id="${{ secrets.TELE_CHANNEL_ID }}" \
-          -d text="❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
-           https://api.telegram.org/bot"${{ secrets.TELE_TOKEN }}"/sendMessage
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELE_CHANNEL_ID }}
+          token: ${{ secrets.TELE_TOKEN }}
+          message: "❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }}"
+        
