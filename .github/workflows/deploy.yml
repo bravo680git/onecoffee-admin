@@ -8,6 +8,7 @@ env:
   IMAGE_NAME: bravo680/onecoffee-admin-web
   IMAGE_TAG: latest
   WEB_FOLDER: /var/www/onecoffee-admin-web
+  PROJECT: ONe Coffee admin web - production
 
 jobs:
   Lint:
@@ -27,6 +28,14 @@ jobs:
           pnpm i
           pnpm lint
 
+      - name: Notify to Telegram
+        uses: ./.github/actions/notify
+        with:
+          status: ${{ job.status }}
+          project: ${{ env.PROJECT }}
+          token: ${{ secrets.TELE_TOKEN }}
+          to: ${{ secrets.TELE_CHANNEL_ID }}
+
   BuildAndPushImage:
     runs-on: ubuntu-latest
     needs: Lint
@@ -43,6 +52,14 @@ jobs:
           docker build -t $IMAGE_NAME:$IMAGE_TAG .
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push $IMAGE_NAME:$IMAGE_TAG
+
+      - name: Notify to Telegram
+        uses: ./.github/actions/notify
+        with:
+          status: ${{ job.status }}
+          project: ${{ env.PROJECT }}
+          token: ${{ secrets.TELE_TOKEN }}
+          to: ${{ secrets.TELE_CHANNEL_ID }}
 
   DeployToEC2:
     runs-on: ubuntu-latest
@@ -74,26 +91,12 @@ jobs:
             exit 1; \
           fi"
 
-  NotifyOnSuccess:
-    runs-on: ubuntu-latest
-    needs: [DeployToEC2]
-    if: success()
-    steps:
-      - name: Notify Telegram on success
-        uses: appleboy/telegram-action@master
+      - uses: actions/checkout@v4
+      - name: Notify to Telegram
+        uses: ./.github/actions/notify
         with:
-          to: ${{ secrets.TELE_CHANNEL_ID }}
+          status: ${{ job.status }}
+          project: ${{ env.PROJECT }}
           token: ${{ secrets.TELE_TOKEN }}
-          message: "🎉 CI/CD job successful! Workflow: ${{ github.workflow }} | Job: ${{ github.job }} | Project: ONe coffee admin web"
+          to: ${{ secrets.TELE_CHANNEL_ID }}
 
-  NotifyOnFailure:
-    runs-on: ubuntu-latest
-    needs: [DeployToEC2]
-    if: failure()
-    steps:
-      - name: Notify Telegram on failure
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELE_CHANNEL_ID }}
-          token: ${{ secrets.TELE_TOKEN }}
-          message: "❌ CI/CD job failed! Workflow: ${{ github.workflow }} | Job: ${{ github.job }} | Project: ONe coffee admin web"
