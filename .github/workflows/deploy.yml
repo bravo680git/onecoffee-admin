@@ -95,3 +95,30 @@ jobs:
           token: ${{ secrets.TELE_TOKEN }}
           to: ${{ secrets.TELE_CHANNEL_ID }}
 
+  RemoveDockerImage:
+    name: Remove docker image on docker hub
+    runs-on: ubuntu-latest
+    needs: DeployToEC2
+    steps:
+      - name: Get docker token
+        run: |
+          echo "Getting token from Docker Hub..."
+          TOKEN=$(curl -s -H "Content-Type: application/json" \
+            -X POST \
+            -d '{"username": "${{ secrets.DOCKER_USERNAME }}", "password": "${{ secrets.DOCKER_PASSWORD }}"}' \
+            https://hub.docker.com/v2/users/login/ | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
+          echo "DOCKER_HUB_TOKEN=$TOKEN" >> $GITHUB_ENV
+      - name: Remove image on docker hub
+        if: success()
+        run: |
+          echo "Deleting image from Docker Hub..."
+          curl -s -X DELETE \
+            -H "Authorization: JWT ${{ env.DOCKER_HUB_TOKEN }}" \
+            "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/$IMAGE_TAG"
+          echo "Docker image $IMAGE_NAME:$IMAGE_TAG has been deleted successfully."
+      - name: Notify to Telegram
+        uses: bravo680git/tele-notify@v1
+        with:
+          token: ${{ secrets.TELE_TOKEN }}
+          to: ${{ secrets.TELE_CHANNEL_ID }}
+
