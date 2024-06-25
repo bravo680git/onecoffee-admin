@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: ONe Coffee admin web CI/CD
 on:
   push:
     branches:
@@ -8,7 +8,6 @@ env:
   IMAGE_NAME: bravo680/onecoffee-admin-web
   IMAGE_TAG: latest
   WEB_FOLDER: /var/www/onecoffee-admin-web
-  PROJECT: ONe Coffee admin web - production
 
 jobs:
   Lint:
@@ -29,10 +28,8 @@ jobs:
           pnpm lint
 
       - name: Notify to Telegram
-        uses: ./.github/actions/notify
+        uses: bravo680git/tele-notify@v1
         with:
-          status: ${{ job.status }}
-          project: ${{ env.PROJECT }}
           token: ${{ secrets.TELE_TOKEN }}
           to: ${{ secrets.TELE_CHANNEL_ID }}
 
@@ -54,10 +51,8 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
       - name: Notify to Telegram
-        uses: ./.github/actions/notify
+        uses: bravo680git/tele-notify@v1
         with:
-          status: ${{ job.status }}
-          project: ${{ env.PROJECT }}
           token: ${{ secrets.TELE_TOKEN }}
           to: ${{ secrets.TELE_CHANNEL_ID }}
 
@@ -91,12 +86,9 @@ jobs:
             exit 1; \
           fi"
 
-      - uses: actions/checkout@v4
       - name: Notify to Telegram
-        uses: ./.github/actions/notify
+        uses: bravo680git/tele-notify@v1
         with:
-          status: ${{ job.status }}
-          project: ${{ env.PROJECT }}
           token: ${{ secrets.TELE_TOKEN }}
           to: ${{ secrets.TELE_CHANNEL_ID }}
 
