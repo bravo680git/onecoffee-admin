@@ -29,6 +29,7 @@ jobs:
           pnpm lint
 
       - name: Notify to Telegram
+        if: always()
         uses: bravo680git/tele-notify@v1
         with:
           token: ${{ secrets.TELE_TOKEN }}
@@ -53,6 +54,7 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
       - name: Notify to Telegram
+        if: always()
         uses: bravo680git/tele-notify@v1
         with:
           token: ${{ secrets.TELE_TOKEN }}
@@ -90,6 +92,7 @@ jobs:
           fi"
 
       - name: Notify to Telegram
+        if: always()
         uses: bravo680git/tele-notify@v1
         with:
           token: ${{ secrets.TELE_TOKEN }}
@@ -117,6 +120,7 @@ jobs:
             "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags/$IMAGE_TAG"
           echo "Docker image $IMAGE_NAME:$IMAGE_TAG has been deleted successfully."
       - name: Notify to Telegram
+        if: always()
         uses: bravo680git/tele-notify@v1
         with:
           token: ${{ secrets.TELE_TOKEN }}
