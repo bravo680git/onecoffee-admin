@@ -118,7 +118,7 @@ function Blog() {
     blogApi
       .getAll()
       .then((res) => {
-        setItems(res.data.blogs);
+        setItems(res.data);
       })
       .catch();
   };
@@ -152,7 +152,7 @@ function Blog() {
     fetchData();
     categoryApi.getAll().then((res) => {
       setCatOpts(
-        res.data.categories
+        res.data
           .filter((item) => item.parentId === CATEGORY_TYPE.BLOG)
           .map((item) => ({
             label: item.name,

@@ -16,11 +16,3 @@ type BannerType = {
   link: string;
   isActive: boolean;
 };
-
-type BannerResponse = {
-  banner: BannerType;
-};
-
-type BannerListResponse = {
-  banners: BannerType[];
-};

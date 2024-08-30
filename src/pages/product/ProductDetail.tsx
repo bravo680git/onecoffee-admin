@@ -8,6 +8,7 @@ import { upload } from "@/services/api/upload";
 import {
   CATEGORY_TYPE,
   FAKE_UPLOAD_URL,
+  MSG_DIST,
   PRODUCT_EDITOR_OPTION,
   PRODUCT_UNIT,
   RULES,
@@ -208,6 +209,9 @@ function ProductDetail() {
 
       navigate(path.products);
     } catch (error) {
+      notificationApi?.error({
+        message: MSG_DIST[(error as BaseResponse).message] ?? "Có lỗi xảy ra",
+      });
       console.log(error);
     } finally {
       setLoading(false);
@@ -219,7 +223,7 @@ function ProductDetail() {
       productApi
         .getById(Number(id))
         .then((res) => {
-          const productData = res.data.product;
+          const productData = res.data;
           setData(productData);
           form.setFieldsValue({
             ...productData,
@@ -255,7 +259,7 @@ function ProductDetail() {
       .getAll()
       .then((res) => {
         setCategoryOptions(
-          res.data.categories
+          res.data
             .filter((item) => item.parentId === CATEGORY_TYPE.PRODUCT)
             .map((item) => ({
               label: item.name,

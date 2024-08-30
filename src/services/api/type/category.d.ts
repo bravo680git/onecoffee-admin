@@ -12,12 +12,4 @@ type CategoryType = {
   createdAt?: string;
 };
 
-type CategoriesResponse = {
-  categories: CategoryType[];
-};
-
-type CategoryResponse = {
-  category: CategoryType;
-};
-
 type UpdateCategoryPayload = CreateCategoryPayload;

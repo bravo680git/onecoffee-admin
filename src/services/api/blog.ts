@@ -7,16 +7,14 @@ const route = "/blog";
 
 export const blogApi = {
   getAll() {
-    return axiosClient.get<never, BaseResponse<{ blogs: BlogType[] }>>(route);
+    return axiosClient.get<never, BaseResponse<BlogType[]>>(route);
   },
   getById(id: number) {
-    return axiosClient.get<never, BaseResponse<{ blog: BlogType }>>(
-      `${route}/${id}`
-    );
+    return axiosClient.get<never, BaseResponse<BlogType>>(`${route}/${id}`);
   },
   async create(payload: CreateBlogPayload) {
     return axiosClient
-      .post<never, BaseResponse<{ blog: BlogType }>>(route, payload)
+      .post<never, BaseResponse<BlogType>>(route, payload)
       .then((res) => {
         revalidateTag(RevalidateTags.blog);
         return res;
@@ -24,16 +22,16 @@ export const blogApi = {
   },
   async update(id: number, payload: UpdateBlogPayload) {
     return axiosClient
-      .patch<never, BaseResponse<{ blog: BlogType }>>(`${route}/${id}`, payload)
+      .patch<never, BaseResponse<BlogType>>(`${route}/${id}`, payload)
       .then((res) => {
-        revalidateTag(RevalidateTags.blogDetail(res.data.blog.slug));
+        revalidateTag(RevalidateTags.blogDetail(res.data.slug));
         revalidateTag(RevalidateTags.blog);
         return res;
       });
   },
   async delete(id: number) {
     return axiosClient
-      .delete<never, BaseResponse<{ blog: BlogType }>>(`${route}/${id}`)
+      .delete<never, BaseResponse<BlogType>>(`${route}/${id}`)
       .then((res) => {
         revalidateTag(RevalidateTags.blog);
         return res;

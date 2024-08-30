@@ -27,6 +27,7 @@ import {
   BLOG_EDITOR_OPTION,
   CATEGORY_TYPE,
   FAKE_UPLOAD_URL,
+  MSG_DIST,
   RULES,
 } from "../../utils/constants";
 
@@ -106,7 +107,7 @@ function BlogDetail() {
       })
       .catch((err: BaseResponse) => {
         notificationApi?.error({
-          message: err.message,
+          message: MSG_DIST[err.message] ?? "Có lỗi xảy ra",
         });
       })
       .finally(() => {
@@ -149,7 +150,7 @@ function BlogDetail() {
       .getAll()
       .then((res) => {
         setCategoryOptions(
-          res.data.categories
+          res.data
             .filter((item) => item.parentId === CATEGORY_TYPE.BLOG)
             .map((item) => ({
               label: item.name,
@@ -163,8 +164,8 @@ function BlogDetail() {
       blogApi
         .getById(Number(id))
         .then((res) => {
-          form.setFieldsValue(res.data.blog);
-          setUploadImgSrc(res.data.blog.thumbnail);
+          form.setFieldsValue(res.data);
+          setUploadImgSrc(res.data.thumbnail);
         })
         .catch();
     }

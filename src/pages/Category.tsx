@@ -115,8 +115,8 @@ function Category() {
     categoryApi
       .getAll()
       .then((res) => {
-        setData(res.data.categories);
-        setExpandKeys(res.data.categories.map((i) => i.id));
+        setData(res.data);
+        setExpandKeys(res.data.map((i) => i.id));
       })
       .catch();
   };

@@ -13,7 +13,7 @@ export const upload = (name: string, file: File) => {
   data.append("file", file);
 
   return axiosClient.post<never, BaseResponse<UploadResponse>>(
-    "/upload",
+    "/file/upload",
     data,
     {
       headers: {

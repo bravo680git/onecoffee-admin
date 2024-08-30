@@ -2,21 +2,20 @@ import { RevalidateTags } from "@/utils/constants";
 import { axiosClient } from "./axiosClient";
 import { revalidateTag } from "./revalidate";
 import {
-  CategoryResponse,
+  CategoryType,
   CreateCategoryPayload,
   UpdateCategoryPayload,
-  CategoriesResponse,
 } from "./type/category";
 
 const route = "/category";
 
 export const categoryApi = {
   getAll() {
-    return axiosClient.get<never, BaseResponse<CategoriesResponse>>(route);
+    return axiosClient.get<never, BaseResponse<CategoryType[]>>(route);
   },
   async create(payload: CreateCategoryPayload) {
     return axiosClient
-      .post<never, BaseResponse<CategoryResponse>>(route, payload)
+      .post<never, BaseResponse<CategoryType>>(route, payload)
       .then((res) => {
         revalidateTag(RevalidateTags.category);
         return res;
@@ -24,7 +23,7 @@ export const categoryApi = {
   },
   async update(id: number, payload: UpdateCategoryPayload) {
     return axiosClient
-      .patch<never, BaseResponse<CategoryResponse>>(`${route}/${id}`, payload)
+      .patch<never, BaseResponse<CategoryType>>(`${route}/${id}`, payload)
       .then((res) => {
         revalidateTag(RevalidateTags.category);
         return res;

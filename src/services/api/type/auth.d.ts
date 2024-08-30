@@ -4,6 +4,15 @@ export type LoginPayload = {
 };
 
 type LoginResponse = {
+  userId: number;
+};
+
+type OTPVerifyPayload = {
+  userId: number;
+  otpCode: string;
+};
+
+type OTPVerifyResponse = {
   accessToken: string;
   refreshToken: string;
   user: {
