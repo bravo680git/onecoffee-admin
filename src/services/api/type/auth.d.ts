@@ -21,3 +21,5 @@ type OTPVerifyResponse = {
     avatar?: string;
   };
 };
+
+type RefreshTokenResponse = OTPVerifyResponse;
