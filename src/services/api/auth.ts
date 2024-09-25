@@ -4,6 +4,7 @@ import {
   LoginResponse,
   OTPVerifyPayload,
   OTPVerifyResponse,
+  RefreshTokenResponse,
 } from "./type/auth";
 
 export const authApi = {
@@ -23,7 +24,7 @@ export const authApi = {
     );
   },
   refresh(refreshToken: string) {
-    return axiosClient.post<unknown, BaseResponse<LoginResponse>>(
+    return axiosClient.post<unknown, BaseResponse<RefreshTokenResponse>>(
       "/auth/refresh",
       { refreshToken }
     );
