@@ -130,7 +130,7 @@ function Banner() {
     bannerApi
       .getAll()
       .then((res) => {
-        setItems(res.data.banners);
+        setItems(res.data);
       })
       .catch();
   };

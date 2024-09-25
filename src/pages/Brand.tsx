@@ -81,7 +81,7 @@ function Brand() {
     brandApi
       .getAll()
       .then((res) => {
-        setData(res.data.brands);
+        setData(res.data);
       })
       .catch();
   };

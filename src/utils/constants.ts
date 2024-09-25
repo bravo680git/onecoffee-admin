@@ -76,6 +76,8 @@ export const BLOG_EDITOR_OPTION = {
 
 export const MSG_DIST: Record<string, string> = {
   DUPLICATE_RECORD: "Dữ liệu bị trùng lặp",
+  MAX_SIZE_EXCEED:
+    "Kích thước file quá lớn, vui lòng chọn file có kích thước nhỏ hơn",
 };
 
 export enum CATEGORY_TYPE {
@@ -85,7 +87,8 @@ export enum CATEGORY_TYPE {
 }
 
 export const PRODUCT_UNIT = ["ly", "cái", "phần", "kg", "túi"];
-export const FAKE_UPLOAD_URL = import.meta.env.VITE_BASE_URL + "/fake";
+export const FAKE_UPLOAD_URL =
+  import.meta.env.VITE_BASE_URL + "/file/upload/fake";
 export const RevalidateTags = {
   product: "product",
   productDetail(slug: string) {

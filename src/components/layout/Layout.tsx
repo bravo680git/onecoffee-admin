@@ -20,6 +20,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { path } from "../../routes/path";
 import { border } from "../../theme/constants";
+import { authApi } from "@/services/api/auth";
 
 const menuItems: MenuProps["items"] = [
   // {
@@ -76,7 +77,8 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         key: "logout",
         label: "Đăng xuất",
         icon: <LogoutCurve size={16} />,
-        onClick() {
+        async onClick() {
+          await authApi.logout();
           localStorage.clear();
           navigate(path.login);
         },

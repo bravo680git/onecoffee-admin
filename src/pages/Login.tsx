@@ -4,7 +4,7 @@ import { authStorage } from "@/services/storage";
 import { Button, Card, Form, Input, Layout, Space, Typography } from "antd";
 import { InputOTP } from "antd-input-otp";
 import { ArrowLeft, ArrowRight } from "iconsax-react";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { path } from "../routes/path";
 import { RULES } from "../utils/constants";
@@ -19,12 +19,24 @@ function Login() {
 
   const [inLastStep, setInLastStep] = useState(false);
   const [loading, setLoading] = useState(false);
+  const loggedInUserId = useRef<number>();
 
   const handleSubmitOTP = (value: string[]) => {
+    if (!loggedInUserId.current) {
+      notificationApi?.error({
+        message: "Thông tin đăng nhập không hợp lệ",
+      });
+      return;
+    }
     setLoading(true);
     authApi
-      .confirm(value.join(""))
-      .then(() => {
+      .verify({
+        otpCode: value.join(""),
+        userId: loggedInUserId.current,
+      })
+      .then((res) => {
+        authStorage.setAccessToken(res.data.accessToken);
+        authStorage.setRefreshToken(res.data.refreshToken);
         notificationApi?.success({
           message: "Đăng nhập thành công",
         });
@@ -46,8 +58,7 @@ function Login() {
     authApi
       .login(data)
       .then((res) => {
-        authStorage.setAccessToken(res.data.accessToken);
-        authStorage.setRefreshToken(res.data.refreshToken);
+        loggedInUserId.current = res.data.userId;
         setInLastStep(true);
       })
       .catch(() => {

@@ -146,7 +146,7 @@ function Product() {
     productApi
       .getAll()
       .then((res) => {
-        setItems(res.data.products);
+        setItems(res.data);
       })
       .catch();
   };
@@ -157,7 +157,7 @@ function Product() {
       .getAll()
       .then((res) => {
         setCatOpts(
-          res.data.categories
+          res.data
             ?.filter((item) => item.parentId === CATEGORY_TYPE.PRODUCT)
             ?.map((item) => ({
               label: item.name,

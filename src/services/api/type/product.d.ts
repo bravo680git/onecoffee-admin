@@ -53,11 +53,3 @@ type ProductType = {
 };
 
 type UpdateProductPayload = CreateProductPayload;
-
-type ProductsResponse = {
-  products: ProductType[];
-};
-
-type ProductResponse = {
-  product: ProductType;
-};

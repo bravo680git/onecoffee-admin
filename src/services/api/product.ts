@@ -3,8 +3,7 @@ import { axiosClient } from "./axiosClient";
 import { revalidateTag } from "./revalidate";
 import {
   CreateProductPayload,
-  ProductResponse,
-  ProductsResponse,
+  ProductType,
   UpdateProductPayload,
 } from "./type/product";
 
@@ -18,16 +17,14 @@ export const productApi = {
     });
   },
   getAll() {
-    return axiosClient.get<never, BaseResponse<ProductsResponse>>(route);
+    return axiosClient.get<never, BaseResponse<ProductType[]>>(route);
   },
   getById(id: number) {
-    return axiosClient.get<never, BaseResponse<ProductResponse>>(
-      `${route}/${id}`
-    );
+    return axiosClient.get<never, BaseResponse<ProductType>>(`${route}/${id}`);
   },
   async delete(id: number) {
     return axiosClient
-      .delete<never, BaseResponse<ProductResponse>>(`${route}/${id}`)
+      .delete<never, BaseResponse<ProductType>>(`${route}/${id}`)
       .then((res) => {
         revalidateTag(RevalidateTags.product);
         return res;
@@ -35,9 +32,9 @@ export const productApi = {
   },
   async update(id: number, payload: UpdateProductPayload) {
     return axiosClient
-      .patch<never, BaseResponse<ProductResponse>>(`${route}/${id}`, payload)
+      .patch<never, BaseResponse<ProductType>>(`${route}/${id}`, payload)
       .then((res) => {
-        revalidateTag(RevalidateTags.productDetail(res.data.product.slug));
+        revalidateTag(RevalidateTags.productDetail(res.data.slug));
         revalidateTag(RevalidateTags.product);
         return res;
       });

@@ -7,9 +7,3 @@ type BrandType = {
   id: number;
   name: string;
 };
-type BrandsResponse = {
-  brands: BrandType[];
-};
-type BrandResponse = {
-  brand: BrandType;
-};
